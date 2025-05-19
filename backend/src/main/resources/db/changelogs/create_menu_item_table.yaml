@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_menu_item_table
+      author: CandleStudent
+      changes:
+        - createTable:
+            tableName: menu_item
+            remarks: таблица с блюдами из меню
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: menu_item_pk
+                    nullable: false
+                    unique: true
+              - column:
+                  name: row_insert_time
+                  type: datetime
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: row_update_time
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: category
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cost
+                  type: numeric(20, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ingredients
+                  type: varchar(255)
+              - column:
+                  name: description
+                  type: varchar(255)
+
+        - createSequence:
+            sequenceName: s_menu_item
+        - addDefaultValue:
+            columnName: id
+            defaultValueSequenceNext: s_menu_item
+            tableName: menu_item
