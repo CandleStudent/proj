@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_address_table
+      author: CandleStudent
+      changes:
+        - createTable:
+            tableName: address
+            remarks: таблица с данными о пользователях
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: address_pk
+                    nullable: false
+                    unique: true
+              - column:
+                  name: row_insert_time
+                  type: datetime
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: row_update_time
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: city
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: street
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: building
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: entrance
+                  type: int
+              - column:
+                  name: floor
+                  type: int
+              - column:
+                  name: apartments
+                  type: int
+
+        - createSequence:
+            sequenceName: s_address
+        - addDefaultValue:
+            columnName: id
+            defaultValueSequenceNext: s_address
+            tableName: address
