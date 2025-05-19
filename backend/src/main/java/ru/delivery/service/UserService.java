@@ -1,5 +1,6 @@
 package ru.delivery.service;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,16 @@ public class UserService {
     user.setEmail(email);
     user.setPasswordHash(passwordEncoder.encode(password));
     userRepository.save(user);
+  }
+
+  public boolean login(String email, String password) {
+    Optional<User> userOpt = userRepository.findByEmail(email);
+    if (userOpt.isEmpty()) {
+      return false;
+    }
+    User user = userOpt.get();
+    // Сравниваем введённый пароль с хэшем
+    return passwordEncoder.matches(password, user.getPasswordHash());
   }
 
 }

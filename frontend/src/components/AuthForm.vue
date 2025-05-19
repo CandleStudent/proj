@@ -142,7 +142,7 @@
 
     router.push('/home')
   } catch (err) {
-    alert('Ошибка при отправке формы')
+    alert(err.response.data)
     console.error(err)
   }
 }
