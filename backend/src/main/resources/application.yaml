@@ -1,0 +1,31 @@
+spring:
+  application.name: backend
+  datasource:
+    url: ${YUMMY_DATABASE_URL:jdbc:postgresql://localhost:5432/yummy}
+    username: postgres
+    password: qwerty123
+    driver-class-name: org.postgresql.Driver
+  security:
+    user:
+      name: user
+      password: pass
+  jpa:
+    hibernate:
+      ddl-auto: none
+    #show-sql: true
+    properties:
+      hibernate:
+        jdbc.batch_size: 100
+        order_inserts: true
+        order_updates: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: public
+  liquibase:
+    changelog: "classpath:/db/changelog-master.yaml"
+    driver-class-name: org.postgresql.Driver
+#    url: ${YUMMY_DATABASE_URL:jdbc:postgresql://db:5432/yummy}
+#    password: qwerty123
+#    parameters:
+#      username: postgres
+#    enabled: true
+

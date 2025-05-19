@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres:15
+    container_name: yummy_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: yummy
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: qwerty123
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: pg_isready -U $$POSTGRES_USER -d $$POSTGRESDB
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
+
+#  app:
+#    build: .
+#    container_name: food_delivery
+#    depends_on:
+#      - db
+##    environment:
+##      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/yummy_db
+##      SPRING_DATASOURCE_USERNAME: yummy
+##      SPRING_DATASOURCE_PASSWORD: yummy
+#    ports:
+#      - "8080:8080"
