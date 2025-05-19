@@ -10,7 +10,7 @@
       <transition name="slide-fade" mode="out-in">
         <div
             :key="isRegistering"
-            class="w-full max-w-md bg-white p-10 rounded-xl shadow-lg"
+            class="w-full max-w-md bg-white p-10 rounded-xl shadow-2xl"
             :class="{ 'animate-shake': shake }"
             @animationend="shake = false"
         >
@@ -21,7 +21,7 @@
 
           <form @submit.prevent="handleSubmit">
             <!-- Email -->
-            <div class="mb-6">
+            <div class="mb-2">
               <label for="email" class="block text-base font-medium text-gray-600 mb-2 text-center">Email</label>
               <input
                   type="email"
