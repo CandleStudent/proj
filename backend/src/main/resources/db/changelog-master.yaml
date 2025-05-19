@@ -8,3 +8,6 @@ databaseChangeLog:
   - include:
       relativeToChangeLogFile: true
       file: "changelogs/create_address_table.yaml"
+  - include:
+      relativeToChangeLogFile: true
+      file: "changelogs/create_customer_address_table.yaml"
