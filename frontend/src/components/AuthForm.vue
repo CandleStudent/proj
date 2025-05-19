@@ -143,7 +143,7 @@
     const token = response.data.token;
     localStorage.setItem("jwt_token", token);
 
-    router.push('/home')
+    router.push('/menu')
   } catch (err) {
     alert(err.response.data)
     console.error(err)
