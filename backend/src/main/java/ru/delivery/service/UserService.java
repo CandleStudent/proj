@@ -33,14 +33,18 @@ public class UserService {
     customer = customerRepository.save(customer);
   }
 
-  public boolean login(String email, String password) {
+  public Long login(String email, String password) {
     Optional<User> userOpt = userRepository.findByEmail(email);
     if (userOpt.isEmpty()) {
-      return false;
+      throw new RuntimeException("Пользователя с таким e-mail нет");
     }
     User user = userOpt.get();
     // Сравниваем введённый пароль с хэшем
-    return passwordEncoder.matches(password, user.getPasswordHash());
+    boolean isPasswordCorrect = passwordEncoder.matches(password, user.getPasswordHash());
+    if (!isPasswordCorrect) {
+      throw new RuntimeException("Введен неправильный пароль");
+    }
+    return user.getId();
   }
 
 }

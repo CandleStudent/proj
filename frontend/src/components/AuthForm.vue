@@ -135,10 +135,13 @@
     const endpoint = isRegistering.value ? REGISTER_ENDPOINT : LOGIN_ENDPOINT
     const url = `${API_HOST}${endpoint}`
 
-    await axios.post(url, {
+    var response = await axios.post(url, {
       email: email.value,
       password: password.value
     })
+
+    const token = response.data.token;
+    localStorage.setItem("jwt_token", token);
 
     router.push('/home')
   } catch (err) {
