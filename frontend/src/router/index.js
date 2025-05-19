@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import RegisterForm from '../components/RegisterForm.vue'
 import HomePage from '../components/HomePage.vue'
+import AuthForm from "@/components/AuthForm.vue";
 
 const routes = [
-  { path: '/register', component: RegisterForm },
+  { path: '/auth', component: AuthForm },
   { path: '/home', component: HomePage },
-  { path: '/', redirect: '/register' }
+  { path: '/', redirect: '/auth' }
 ]
 
 export const router = createRouter({
