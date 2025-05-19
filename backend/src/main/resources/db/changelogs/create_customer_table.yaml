@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_customer_table
+      author: CandleStudent
+      changes:
+        - createTable:
+            tableName: customer
+            remarks: таблица с данными о клиентах сервиса
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: customer_pk
+                    nullable: false
+                    unique: true
+              - column:
+                  name: row_insert_time
+                  type: datetime
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: row_update_time
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: surname
+                  type: varchar(255)
+              - column:
+                  name: phone
+                  type: varchar(12)
+
+        - addForeignKeyConstraint:
+            baseTableName: customer
+            baseColumnNames: id
+            referencedTableName: user
+            referencedColumnNames: id
+            constraintName: customer_fk0
