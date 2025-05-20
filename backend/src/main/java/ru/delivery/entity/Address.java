@@ -25,9 +25,6 @@ public class Address {
   @Column(name = "id", nullable = false, unique = true)
   private Long id;
 
-  @Column(name = "row_insert_time", nullable = false, updatable = false)
-  private LocalDateTime rowInsertTime;
-
   @Column(name = "row_update_time", nullable = false)
   private LocalDateTime rowUpdateTime;
 
@@ -51,7 +48,6 @@ public class Address {
 
   @PrePersist
   public void prePersist() {
-    rowInsertTime = LocalDateTime.now();
     rowUpdateTime = LocalDateTime.now();
   }
 

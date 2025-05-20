@@ -4,16 +4,16 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -47,6 +47,24 @@ public class Customer {
 
   @Column(name = "phone", length = 12)
   private String phone;
+
+  @OneToMany(
+      mappedBy = "customer",
+      cascade = CascadeType.ALL,
+      orphanRemoval = true,
+      fetch = FetchType.LAZY
+  )
+  private List<CustomerAddress> addresses = new ArrayList<>();
+
+  public void addAddress(CustomerAddress address) {
+    addresses.add(address);
+    address.setCustomer(this); // Link the address to this customer
+  }
+
+  public void removeAddress(CustomerAddress address) {
+    addresses.remove(address);
+    address.setCustomer(null); // Unlink the address
+  }
 
   @PrePersist
   public void prePersist() {

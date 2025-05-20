@@ -16,4 +16,12 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
               where c.user.email = :email""")
   Optional<Customer> findByEmail(String email);
 
+  @Query(
+      value = """
+              select c from Customer c
+              left join fetch c.user
+              left join fetch c.addresses
+              where c.user.email = :email""")
+  Optional<Customer> findByEmailWithAddresses(String email);
+
 }

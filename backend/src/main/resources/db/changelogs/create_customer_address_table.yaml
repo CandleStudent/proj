@@ -27,6 +27,7 @@ databaseChangeLog:
               - column:
                   name: row_insert_time
                   type: timestamp
+                  defaultValueComputed: now()
                   constraints:
                     nullable: false
               - column:
