@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
+import ru.delivery.dictionary.OrderStatus;
+import ru.delivery.dictionary.PaymentType;
 
 @Entity
 @Table(name = "`order`") // Backticks needed because "order" is a SQL keyword
@@ -40,10 +42,12 @@ public class Order {
   private Boolean isDelivery;
 
   @Column(name = "payment_type", nullable = false, length = 20)
-  private String paymentType;
+  @Enumerated(EnumType.STRING)
+  private PaymentType paymentType;
 
   @Column(name = "status", nullable = false, length = 20)
-  private String status;
+  @Enumerated(EnumType.STRING)
+  private OrderStatus status;
 
   @Column(name = "cost", precision = 20, scale = 2)
   private BigDecimal cost;
