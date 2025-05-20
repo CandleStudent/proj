@@ -1,0 +1,67 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_order_item_table
+      author: CandleStudent
+      changes:
+        - createTable:
+            tableName: order_item
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: order_item_pk
+                    nullable: false
+                    unique: true
+              - column:
+                  name: row_insert_time
+                  type: datetime
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: row_update_time
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: order_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: menu_item
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cost
+                  type: numeric(20, 2)
+                  constraints:
+                    nullable: false
+
+        - createSequence:
+            sequenceName: s_order_item
+        - addDefaultValue:
+            columnName: id
+            defaultValueSequenceNext: s_order_item
+            tableName: order_item
+
+        - addForeignKeyConstraint:
+            baseTableName: order_item
+            baseColumnNames: order_id
+            referencedTableName: order
+            referencedColumnNames: id
+            constraintName: order_item_fk0
+        - addForeignKeyConstraint:
+            baseTableName: order_item
+            baseColumnNames: menu_item_id
+            referencedTableName: menu_item
+            referencedColumnNames: id
+            constraintName: order_item_fk1

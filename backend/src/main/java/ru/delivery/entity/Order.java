@@ -45,7 +45,7 @@ public class Order {
   @Column(name = "status", nullable = false, length = 20)
   private String status;
 
-  @Column(name = "cost")
+  @Column(name = "cost", precision = 20, scale = 2)
   private BigDecimal cost;
 
   @PrePersist

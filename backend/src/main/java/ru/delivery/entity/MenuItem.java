@@ -31,7 +31,7 @@ public class MenuItem {
   @Column(name = "category", nullable = false, length = 50)
   private String category;
 
-  @Column(name = "cost", nullable = false)
+  @Column(name = "cost", nullable = false, precision = 20, scale = 2)
   private BigDecimal cost;
 
   @Column(name = "ingredients")
