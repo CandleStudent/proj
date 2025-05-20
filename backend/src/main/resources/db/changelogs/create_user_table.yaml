@@ -37,9 +37,21 @@ databaseChangeLog:
                   type: varchar(255)
                   constraints:
                     nullable: false
+              - column:
+                  name: role
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
         - createSequence:
             sequenceName: s_user
         - addDefaultValue:
             columnName: id
             defaultValueSequenceNext: s_user
             tableName: user
+
+        - addForeignKeyConstraint:
+            baseTableName: user
+            baseColumnNames: role
+            referencedTableName: role
+            referencedColumnNames: name
+            constraintName: user_fk1

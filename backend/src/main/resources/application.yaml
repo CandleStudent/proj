@@ -29,3 +29,6 @@ spring:
 #      username: postgres
 #    enabled: true
 
+jwt:
+
+

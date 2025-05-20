@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_role_table
+      author: CandleStudent
+      changes:
+        - createTable:
+            tableName: role
+            remarks: таблица с данными о пользователях
+            columns:
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: role_pk
+                    nullable: false
+                    unique: true
+
+        - insert:
+            tableName: role
+            columns:
+              - column:
+                  name: name
+                  value: CUSTOMER
