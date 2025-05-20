@@ -1,60 +1,70 @@
 databaseChangeLog:
   - changeSet:
-      id: create_customer_address_table
+      id: create_order_table
       author: CandleStudent
       changes:
         - createTable:
-            tableName: customer_address
+            tableName: order
             columns:
               - column:
                   name: id
                   type: bigint
                   constraints:
                     primaryKey: true
-                    primaryKeyName: customer_address_pk
+                    primaryKeyName: order_pk
                     nullable: false
                     unique: true
+              - column:
+                  name: row_insert_time
+                  type: datetime
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: row_update_time
+                  type: datetime
+                  constraints:
+                    nullable: false
               - column:
                   name: customer_id
                   type: bigint
                   constraints:
                     nullable: false
               - column:
-                  name: address_id
+                  name: customer_address_id
                   type: bigint
                   constraints:
                     nullable: false
               - column:
-                  name: row_insert_time
-                  type: timestamp
+                  name: payment_type
+                  type: varchar(20)
                   constraints:
                     nullable: false
               - column:
-                  name: row_update_time
-                  type: timestamp
+                  name: status
+                  type: varchar(20)
                   constraints:
                     nullable: false
               - column:
-                  name: comment
-                  type: varchar(255)
+                  name: cost
+                  type: numeric(20, 2)
 
         - createSequence:
-            sequenceName: s_customer_address
+            sequenceName: s_order
         - addDefaultValue:
             columnName: id
-            defaultValueSequenceNext: s_customer_address
-            tableName: customer_address
+            defaultValueSequenceNext: s_order
+            tableName: order
 
         - addForeignKeyConstraint:
-            baseTableName: customer_address
+            baseTableName: order
             baseColumnNames: customer_id
             referencedTableName: customer
             referencedColumnNames: id
-            constraintName: customer_address_fk0
-
+            constraintName: order_fk0
         - addForeignKeyConstraint:
-            baseTableName: customer_address
-            baseColumnNames: address_id
-            referencedTableName: address
+            baseTableName: order
+            baseColumnNames: customer_address_id
+            referencedTableName: customer_address
             referencedColumnNames: id
-            constraintName: customer_address_fk1
+            constraintName: order_fk1
