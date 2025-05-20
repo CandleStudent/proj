@@ -1,6 +1,7 @@
 package ru.delivery.service;
 
 import jakarta.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,9 +39,12 @@ public class AddressService {
     var customer = customerRepository.findByEmailWithAddresses(userEmail)
         .orElseThrow(() -> new RuntimeException("Customer not found"));
 
-    return addressMapper.addressesToAddressDtos(customer.getAddresses()
-        .stream()
-        .map(CustomerAddress::getAddress)
-        .toList());
+    List<AddressDto> dtos = new ArrayList<>();
+    for (var customerAddress: customer.getAddresses()) {
+      var dto = addressMapper.addressToAddressDto(customerAddress.getAddress());
+      dto.setId(customerAddress.getId());
+      dtos.add(dto);
+    }
+    return dtos;
   }
 }

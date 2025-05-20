@@ -16,17 +16,6 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
-                  name: row_insert_time
-                  type: datetime
-                  defaultValueComputed: now()
-                  constraints:
-                    nullable: false
-              - column:
-                  name: row_update_time
-                  type: datetime
-                  constraints:
-                    nullable: false
-              - column:
                   name: name
                   type: varchar(50)
                   constraints:

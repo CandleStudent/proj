@@ -10,7 +10,6 @@ import ru.delivery.entity.Address;
 @Mapper(componentModel = ComponentModel.SPRING)
 public interface AddressMapper {
 
-//  @Mapping(target = "rowInsertTime", ignore = true)
   @Mapping(target = "rowUpdateTime", ignore = true)
   @Mapping(target = "id", ignore = true)
   Address addressDtoToAddress(AddressDto addressDto);
@@ -18,5 +17,9 @@ public interface AddressMapper {
   AddressDto addressToAddressDto(Address address);
 
   List<AddressDto> addressesToAddressDtos(List<Address> address);
+
+//  AddressDto customerAddressToAddressDto(CustomerAddress customerAddress);
+
+//  List<AddressDto> customerAddressToAddressDto(List<CustomerAddress> customerAddress);
 
 }

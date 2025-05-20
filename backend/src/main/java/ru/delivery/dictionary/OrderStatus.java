@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum OrderStatus {
 
-  NEW, COOKING, PACKING, IN_DELIVERY;
+  NEW, COOKING, PACKING, IN_DELIVERY, DONE;
 
   @JsonCreator
   public OrderStatus fromValue(String text) {

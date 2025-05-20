@@ -18,9 +18,6 @@ public class OrderItem {
   @Column(name = "id", nullable = false, unique = true)
   private Long id;
 
-  @Column(name = "row_insert_time", nullable = false, updatable = false)
-  private LocalDateTime rowInsertTime;
-
   @Column(name = "row_update_time", nullable = false)
   private LocalDateTime rowUpdateTime;
 
@@ -39,4 +36,15 @@ public class OrderItem {
 
   @Column(name = "cost", nullable = false, precision = 20, scale = 2)
   private BigDecimal cost;
+
+
+  @PrePersist
+  public void prePersist() {
+    rowUpdateTime = LocalDateTime.now();
+  }
+
+  @PreUpdate
+  public void preUpdate() {
+    rowUpdateTime = LocalDateTime.now();
+  }
 }

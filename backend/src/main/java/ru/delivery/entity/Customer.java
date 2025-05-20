@@ -66,6 +66,24 @@ public class Customer {
     address.setCustomer(null); // Unlink the address
   }
 
+  @OneToMany(
+      mappedBy = "customer", // Refers to the 'customer' field in Order
+      cascade = CascadeType.ALL, // Optional: Persist/delete orders when customer is saved/deleted
+      orphanRemoval = true, // Auto-remove orders when removed from this list
+      fetch = FetchType.LAZY
+  )
+  private List<Order> orders = new ArrayList<>();
+
+  public void addOrder(Order order) {
+    orders.add(order);
+    order.setCustomer(this); // Link the order to this customer
+  }
+
+  public void removeOrder(Order order) {
+    orders.remove(order);
+    order.setCustomer(null); // Unlink the order
+  }
+
   @PrePersist
   public void prePersist() {
     rowInsertTime = LocalDateTime.now();

@@ -20,3 +20,9 @@ databaseChangeLog:
   - include:
       relativeToChangeLogFile: true
       file: "changelogs/create_order_table.yaml"
+  - include:
+      relativeToChangeLogFile: true
+      file: "changelogs/create_order_item_table.yaml"
+  - include:
+      relativeToChangeLogFile: true
+      file: "changelogs/fill_menu_item_table.yaml"

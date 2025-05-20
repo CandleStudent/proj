@@ -31,7 +31,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: menu_item
+                  name: menu_item_id
                   type: bigint
                   constraints:
                     nullable: false

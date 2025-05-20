@@ -10,6 +10,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class AddressDto {
 
+  private Long id;
+
   @NotBlank
   @Size(max = 50)
   private String city;

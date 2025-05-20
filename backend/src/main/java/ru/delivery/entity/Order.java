@@ -1,12 +1,28 @@
 package ru.delivery.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import java.math.BigDecimal;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import ru.delivery.dictionary.OrderStatus;
 import ru.delivery.dictionary.PaymentType;
 
@@ -22,9 +38,6 @@ public class Order {
   @Column(name = "id", nullable = false, unique = true)
   private Long id;
 
-  @Column(name = "row_insert_time", nullable = false, updatable = false)
-  private LocalDateTime rowInsertTime;
-
   @Column(name = "row_update_time", nullable = false)
   private LocalDateTime rowUpdateTime;
 
@@ -38,9 +51,6 @@ public class Order {
       foreignKey = @ForeignKey(name = "order_fk1"))
   private CustomerAddress customerAddress;
 
-  @Column(name = "is_delivery", nullable = false)
-  private Boolean isDelivery;
-
   @Column(name = "payment_type", nullable = false, length = 20)
   @Enumerated(EnumType.STRING)
   private PaymentType paymentType;
@@ -52,9 +62,26 @@ public class Order {
   @Column(name = "cost", precision = 20, scale = 2)
   private BigDecimal cost;
 
+  @OneToMany(
+      mappedBy = "order", // Refers to the 'order' field in OrderItem
+      cascade = CascadeType.ALL, // Optional: Persist/delete items when order is saved/deleted
+      orphanRemoval = true,
+      fetch = FetchType.LAZY
+  )
+  private List<OrderItem> items = new ArrayList<>();
+
+  public void addItem(OrderItem item) {
+    items.add(item);
+    item.setOrder(this); // Link the item to this order
+  }
+
+  public void removeItem(OrderItem item) {
+    items.remove(item);
+    item.setOrder(null); // Unlink the item
+  }
+
   @PrePersist
   public void prePersist() {
-    rowInsertTime = LocalDateTime.now();
     rowUpdateTime = LocalDateTime.now();
   }
 

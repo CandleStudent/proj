@@ -1,0 +1,167 @@
+databaseChangeLog:
+  - changeSet:
+      id: fill_menu_item_table
+      author: CandleStudent
+      changes:
+        - insert:
+            tableName: menu_item
+            columns:
+              - column:
+                  name: name
+                  value: "Паста с грибами"
+              - column:
+                  name: category
+                  value: "HOT"
+              - column:
+                  name: cost
+                  value: "450"
+              - column:
+                  name: ingredients
+                  value: "ribbit"
+              - column:
+                  name: description
+                  value: "ribbit"
+        - insert:
+            tableName: menu_item
+            columns:
+              - column:
+                  name: name
+                  value: "Стейк из говядины"
+              - column:
+                  name: category
+                  value: "HOT"
+              - column:
+                  name: cost
+                  value: "790"
+              - column:
+                  name: ingredients
+                  value: "ribbit"
+              - column:
+                  name: description
+                  value: "ribbit"
+        - insert:
+            tableName: menu_item
+            columns:
+              - column:
+                  name: name
+                  value: "Куриное филе гриль"
+              - column:
+                  name: category
+                  value: "HOT"
+              - column:
+                  name: cost
+                  value: "520"
+              - column:
+                  name: ingredients
+                  value: "ribbit"
+              - column:
+                  name: description
+                  value: "ribbit"
+        - insert:
+            tableName: menu_item
+            columns:
+              - column:
+                  name: name
+                  value: "Лимонад клубничный"
+              - column:
+                  name: category
+                  value: "BEVERAGE"
+              - column:
+                  name: cost
+                  value: "180"
+              - column:
+                  name: ingredients
+                  value: "ribbit"
+              - column:
+                  name: description
+                  value: "ribbit"
+        - insert:
+            tableName: menu_item
+            columns:
+              - column:
+                  name: name
+                  value: "Кофе латте"
+              - column:
+                  name: category
+                  value: "BEVERAGE"
+              - column:
+                  name: cost
+                  value: "150"
+              - column:
+                  name: ingredients
+                  value: "ribbit"
+              - column:
+                  name: description
+                  value: "ribbit"
+        - insert:
+            tableName: menu_item
+            columns:
+              - column:
+                  name: name
+                  value: "Морс черничный"
+              - column:
+                  name: category
+                  value: "BEVERAGE"
+              - column:
+                  name: cost
+                  value: "140"
+              - column:
+                  name: ingredients
+                  value: "ribbit"
+              - column:
+                  name: description
+                  value: "ribbit"
+        - insert:
+            tableName: menu_item
+            columns:
+              - column:
+                  name: name
+                  value: "Чизкейк Нью-Йорк"
+              - column:
+                  name: category
+                  value: "DESSERT"
+              - column:
+                  name: cost
+                  value: "290"
+              - column:
+                  name: ingredients
+                  value: "ribbit"
+              - column:
+                  name: description
+                  value: "ribbit"
+        - insert:
+            tableName: menu_item
+            columns:
+              - column:
+                  name: name
+                  value: "Шоколадный фондан"
+              - column:
+                  name: category
+                  value: "DESSERT"
+              - column:
+                  name: cost
+                  value: "310"
+              - column:
+                  name: ingredients
+                  value: "ribbit"
+              - column:
+                  name: description
+                  value: "ribbit"
+        - insert:
+            tableName: menu_item
+            columns:
+              - column:
+                  name: name
+                  value: "Эклер с заварным кремом"
+              - column:
+                  name: category
+                  value: "DESSERT"
+              - column:
+                  name: cost
+                  value: "190"
+              - column:
+                  name: ingredients
+                  value: "ribbit"
+              - column:
+                  name: description
+                  value: "ribbit"
