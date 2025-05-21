@@ -74,6 +74,7 @@ public class OrderService {
         .stream()
         .filter(order -> !order.getStatus().equals(OrderStatus.DONE))
         .map(order -> new ActiveOrderDto()
+            .setId(order.getId())
             .setAddress(addressMapper.addressToAddressDto(order.getCustomerAddress().getAddress()))
             .setPaymentType(order.getPaymentType().toValue())
             .setStatus(order.getStatus().toValue())

@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class ActiveOrderDto {
 
+  private Long id;
   private AddressDto address;
   private String paymentType;
   private BigDecimal cost;

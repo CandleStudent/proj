@@ -18,7 +18,7 @@
 
         <div>
           <label class="block text-sm mb-1 text-gray-600">Имя</label>
-          <input v-model="form.firstName" class="input" placeholder="Введите имя" />
+          <input v-model="form.firstName" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Введите имя" />
         </div>
 
         <div>
@@ -138,11 +138,11 @@ export default {
 }
 </script>
 
-<style scoped>
-.input {
-  @apply w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500;
-}
-.header-btn {
-  @apply bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition;
-}
-</style>
+<!--<style scoped>-->
+<!--.input {-->
+<!--  @apply w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500;-->
+<!--}-->
+<!--.header-btn {-->
+<!--  @apply bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition;-->
+<!--}-->
+<!--</style>-->
