@@ -52,7 +52,7 @@
         <div v-else>
           <div class="border rounded p-4 mb-4 text-left">
             <p><strong>ID заказа:</strong> {{ currentOrder.id }}</p>
-            <p><strong>Сумма:</strong> {{ currentOrder.amount }} ₽</p>
+            <p><strong>Сумма:</strong> {{ currentOrder.cost }} ₽</p>
             <p><strong>Статус:</strong> {{ currentOrder.status }}</p>
           </div>
 
@@ -72,7 +72,7 @@ import axios from 'axios'
 // Вынесенные переменные
 const API_HOST = 'http://localhost:8080'
 const PROFILE_ENDPOINT = '/api/profile'
-const ORDERS_ENDPOINT = '/api/orders/active'
+const ORDERS_ENDPOINT = '/api/order/active'
 
 export default {
   data() {
