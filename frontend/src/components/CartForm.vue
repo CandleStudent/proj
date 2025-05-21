@@ -59,6 +59,46 @@
           </div>
         </div>
 
+        <!-- Список адресов -->
+        <div class="p-6 border-t">
+          <h3 class="text-xl font-semibold mb-3">Выберите адрес доставки</h3>
+          <div v-if="addresses.length === 0" class="text-gray-500 mb-4">
+            Нет адресов. Добавьте новый адрес.
+          </div>
+          <div v-else class="space-y-2 mb-4">
+            <label
+                v-for="addr in addresses"
+                :key="addr.id"
+                class="flex items-center space-x-3 cursor-pointer"
+            >
+              <input
+                  type="radio"
+                  name="address"
+                  :value="addr.id"
+                  v-model="selectedAddressId"
+                  class="form-radio"
+              />
+              <div>
+                <div>
+                  {{ addr.city }}, {{ addr.street }}, д. {{ addr.building }}
+                  <span v-if="addr.entrance">, подъезд {{ addr.entrance }}</span>
+                  <span v-if="addr.floor">, этаж {{ addr.floor }}</span>
+                  <span v-if="addr.apartment">, кв. {{ addr.apartment }}</span>
+                </div>
+                <div v-if="addr.comment" class="text-gray-600 text-sm italic">
+                  {{ addr.comment }}
+                </div>
+              </div>
+            </label>
+          </div>
+          <button
+              @click="showAddAddressModal = true"
+              class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded"
+          >
+            Добавить адрес
+          </button>
+        </div>
+
         <!-- Нижняя панель с оплатой и итогом -->
         <div class="border-t p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-6 sm:space-y-0">
           <div class="flex space-x-6">
@@ -97,7 +137,7 @@
           </div>
           <button
               @click="checkout"
-              :disabled="cart.length === 0"
+              :disabled="cart.length === 0 || !selectedAddressId"
               class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
           >
             Оформить заказ
@@ -105,15 +145,30 @@
         </div>
       </div>
     </div>
+
+    <!-- Модальное окно добавления адреса -->
+    <AddAddressModal
+        :show="showAddAddressModal"
+        @close="showAddAddressModal = false"
+        @address-added="handleAddressAdded"
+    />
   </div>
 </template>
 
 <script>
+import AddAddressModal from '@/components/AddAddressModal.vue';
+
 export default {
+  components: {
+    AddAddressModal,
+  },
   data() {
     return {
       cart: [],
       paymentMethod: 'cash',
+      addresses: [],
+      selectedAddressId: null,
+      showAddAddressModal: false,
     };
   },
   computed: {
@@ -141,53 +196,99 @@ export default {
       }
       this.saveCart();
     },
-    checkout() {
-      const order = this.cart.map(({ id, quantity }) => ({ id, quantity }));
-      alert(
-          `Заказ оформлен!\nОплата: ${this.paymentMethod}\nТовары:\n${JSON.stringify(
-              order,
-              null,
-              2
-          )}`
-      );
-      this.cart = [];
-      this.saveCart();
-      this.$router.push('/menu');
+    async fetchAddresses() {
+      try {
+        const token = localStorage.getItem('jwt_token');
+        if (!token) throw new Error('Неавторизован');
+
+        // Предполагается, что userId можно извлечь из JWT,
+        // либо он доступен где-то в приложении.
+        // Здесь я просто покажу пример с userId из токена.
+        // Лучше заменить на реальный способ получения userId.
+        const userId = this.parseJwt(token).userId;
+
+        const response = await fetch(`/address/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) throw new Error('Ошибка при загрузке адресов');
+
+        this.addresses = await response.json();
+
+        // Если выбранный адрес теперь отсутствует, сбрасываем выбор
+        if (!this.addresses.find(addr => addr.id === this.selectedAddressId)) {
+          this.selectedAddressId = null;
+        }
+      } catch (e) {
+        alert(e.message || 'Ошибка при загрузке адресов');
+        this.addresses = [];
+      }
+    },
+    handleAddressAdded() {
+      this.fetchAddresses();
+    },
+    async checkout() {
+      try {
+        if (!this.selectedAddressId) {
+          alert('Выберите адрес доставки');
+          return;
+        }
+        const token = localStorage.getItem('jwt_token');
+        if (!token) throw new Error('Неавторизован');
+
+        const orderPayload = {
+          addressId: this.selectedAddressId,
+          paymentMethod: this.paymentMethod,
+          items: this.cart.map(({ id, quantity }) => ({ id, quantity })),
+        };
+        const response = await fetch('/order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(orderPayload),
+        });
+        if (!response.ok) throw new Error('Ошибка оформления заказа');
+
+        alert('Заказ успешно оформлен!');
+        this.cart = [];
+        this.saveCart();
+        // Перенаправить или обновить страницу
+        this.$router.push('/orders');
+      } catch (e) {
+        alert(e.message || 'Ошибка оформления заказа');
+      }
     },
     logout() {
       localStorage.removeItem('jwt_token');
       this.$router.push('/login');
     },
+// Простой парсер JWT, чтобы достать userId из payload
+    parseJwt(token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+            atob(base64)
+            .split('')
+            .map(function (c) {
+              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            })
+            .join('')
+        );
+        return JSON.parse(jsonPayload);
+      } catch {
+        return {};
+      }
+    },
   },
   mounted() {
     this.loadCart();
+    this.fetchAddresses();
   },
 };
 </script>
 
-<style scoped>
-.menu-btn {
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  transition: background 0.3s;
-  background-color: #f3f4f6;
-  text-decoration: none;
-  color: #1f2937;
-  font-weight: 500;
-}
-
-.menu-btn:hover {
-  background-color: #e5e7eb;
-}
-
-.menu-btn.active {
-  background-color: #22c55e; /* green-500 */
-  color: white;
-}
-
-/* Кастомные стили для радио переключателей */
-.custom-radio-label span {
-  transition: background-color 0.3s, color 0.3s;
-  user-select: none;
-}
-</style>
+<style scoped> .menu-btn { padding: 0.5rem 1rem; font-weight: 600; color: #2d6a4f; border-radius: 0.375rem; transition: background-color 0.3s; } .menu-btn:hover { background-color: #95d5b2; color: #1b4332; } .menu-btn.active { background-color: #52b788; color: white; } .custom-radio-label input:checked + span { background-color: #f6ad55; /* желтый */ color: white; } .custom-radio-label span { user-select: none; } </style>

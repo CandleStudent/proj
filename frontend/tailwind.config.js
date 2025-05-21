@@ -8,6 +8,7 @@ module.exports = {
     'rounded-md',
     'rounded-lg',
     'bg-green-500',
+    'p-2',
     // Добавь нужные тебе классы
   ],
   theme: {
