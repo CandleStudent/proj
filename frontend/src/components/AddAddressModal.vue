@@ -1,4 +1,3 @@
-<!-- components/AddAddressModal.vue -->
 <template>
   <transition name="fade">
     <div
@@ -17,6 +16,7 @@
                   v-model="address.city"
                   type="text"
                   required
+                  maxlength="50"
                   class="w-full border rounded px-3 py-2"
               />
             </div>
@@ -27,6 +27,7 @@
                   v-model="address.street"
                   type="text"
                   required
+                  maxlength="50"
                   class="w-full border rounded px-3 py-2"
               />
             </div>
@@ -37,6 +38,7 @@
                   v-model="address.building"
                   type="text"
                   required
+                  maxlength="50"
                   class="w-full border rounded px-3 py-2"
               />
             </div>
@@ -44,8 +46,9 @@
               <label class="block font-medium mb-1" for="entrance">Подъезд</label>
               <input
                   id="entrance"
-                  v-model="address.entrance"
-                  type="text"
+                  v-model.number="address.entrance"
+                  type="number"
+                  min="1"
                   class="w-full border rounded px-3 py-2"
               />
             </div>
@@ -53,17 +56,19 @@
               <label class="block font-medium mb-1" for="floor">Этаж</label>
               <input
                   id="floor"
-                  v-model="address.floor"
-                  type="text"
+                  v-model.number="address.floor"
+                  type="number"
+                  min="1"
                   class="w-full border rounded px-3 py-2"
               />
             </div>
             <div>
-              <label class="block font-medium mb-1" for="apartment">Квартира</label>
+              <label class="block font-medium mb-1" for="apartments">Квартира</label>
               <input
-                  id="apartment"
-                  v-model="address.apartment"
-                  type="text"
+                  id="apartments"
+                  v-model.number="address.apartments"
+                  type="number"
+                  min="1"
                   class="w-full border rounded px-3 py-2"
               />
             </div>
@@ -110,9 +115,9 @@ export default {
         city: '',
         street: '',
         building: '',
-        entrance: '',
-        floor: '',
-        apartment: '',
+        entrance: null,
+        floor: null,
+        apartments: null,
         comment: '',
       },
     };
@@ -124,16 +129,16 @@ export default {
         if (!token) throw new Error('Неавторизован');
 
         const payload = {
-          city: this.address.city,
-          street: this.address.street,
-          building: this.address.building,
+          city: this.address.city.trim(),
+          street: this.address.street.trim(),
+          building: this.address.building.trim(),
           entrance: this.address.entrance || null,
           floor: this.address.floor || null,
-          apartment: this.address.apartment || null,
-          comment: this.address.comment || null,
+          apartments: this.address.apartments || null,
+          comment: this.address.comment?.trim() || null,
         };
 
-        const response = await fetch('/address', {
+        const response = await fetch('http://localhost:8080/api/address', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -156,9 +161,9 @@ export default {
         city: '',
         street: '',
         building: '',
-        entrance: '',
-        floor: '',
-        apartment: '',
+        entrance: null,
+        floor: null,
+        apartments: null,
         comment: '',
       };
     },

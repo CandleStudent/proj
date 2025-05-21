@@ -165,7 +165,7 @@ export default {
   data() {
     return {
       cart: [],
-      paymentMethod: 'cash',
+      paymentMethod: 'CASH',
       addresses: [],
       selectedAddressId: null,
       showAddAddressModal: false,
@@ -201,13 +201,7 @@ export default {
         const token = localStorage.getItem('jwt_token');
         if (!token) throw new Error('Неавторизован');
 
-        // Предполагается, что userId можно извлечь из JWT,
-        // либо он доступен где-то в приложении.
-        // Здесь я просто покажу пример с userId из токена.
-        // Лучше заменить на реальный способ получения userId.
-        const userId = this.parseJwt(token).userId;
-
-        const response = await fetch(`/address/${userId}`, {
+        const response = await fetch(`http://localhost:8080/api/address`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -216,7 +210,6 @@ export default {
 
         this.addresses = await response.json();
 
-        // Если выбранный адрес теперь отсутствует, сбрасываем выбор
         if (!this.addresses.find(addr => addr.id === this.selectedAddressId)) {
           this.selectedAddressId = null;
         }
@@ -238,11 +231,15 @@ export default {
         if (!token) throw new Error('Неавторизован');
 
         const orderPayload = {
-          addressId: this.selectedAddressId,
-          paymentMethod: this.paymentMethod,
-          items: this.cart.map(({ id, quantity }) => ({ id, quantity })),
+          customerAddressId: this.selectedAddressId,
+          paymentType: this.paymentMethod,
+          menuItems: this.cart.map(({ id, quantity }) => ({
+            id,
+            amount: quantity,
+          })),
         };
-        const response = await fetch('/order', {
+
+        const response = await fetch('http://localhost:8080/api/order/create', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -255,8 +252,7 @@ export default {
         alert('Заказ успешно оформлен!');
         this.cart = [];
         this.saveCart();
-        // Перенаправить или обновить страницу
-        this.$router.push('/orders');
+        this.$router.push('/profile');
       } catch (e) {
         alert(e.message || 'Ошибка оформления заказа');
       }
@@ -265,7 +261,6 @@ export default {
       localStorage.removeItem('jwt_token');
       this.$router.push('/login');
     },
-// Простой парсер JWT, чтобы достать userId из payload
     parseJwt(token) {
       try {
         const base64Url = token.split('.')[1];
@@ -290,5 +285,6 @@ export default {
   },
 };
 </script>
+
 
 <style scoped> .menu-btn { padding: 0.5rem 1rem; font-weight: 600; color: #2d6a4f; border-radius: 0.375rem; transition: background-color 0.3s; } .menu-btn:hover { background-color: #95d5b2; color: #1b4332; } .menu-btn.active { background-color: #52b788; color: white; } .custom-radio-label input:checked + span { background-color: #f6ad55; /* желтый */ color: white; } .custom-radio-label span { user-select: none; } </style>
