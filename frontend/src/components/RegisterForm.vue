@@ -9,7 +9,7 @@
       </div>
       <div class="text-center text-sm text-gray-600">
         <a href="#" class="text-green-600 hover:text-green-800 transition-colors duration-300">Забыли пароль?</a>
-        <p class="mt-4">Уже есть аккаунт?<button @click="onToggle" type="button" class="ml-1 text-green-700 font-semibold hover:underline">Зарегистрироваться</button></p>
+        <p class="mt-4">Уже есть аккаунт?<button @click="onToggle" type="button" class="ml-1 text-green-700 font-semibold hover:underline">Войти</button></p>
       </div>
     </form>
   </div>

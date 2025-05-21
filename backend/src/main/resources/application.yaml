@@ -23,12 +23,4 @@ spring:
   liquibase:
     changelog: "classpath:/db/changelog-master.yaml"
     driver-class-name: org.postgresql.Driver
-#    url: ${YUMMY_DATABASE_URL:jdbc:postgresql://db:5432/yummy}
-#    password: qwerty123
-#    parameters:
-#      username: postgres
-#    enabled: true
-
-jwt:
-
 
