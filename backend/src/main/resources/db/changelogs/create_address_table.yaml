@@ -50,6 +50,14 @@ databaseChangeLog:
               - column:
                   name: apartments
                   type: int
+              - column:
+                  name: comment
+                  type: varchar(255)
+              - column:
+                  name: customer_id
+                  type: bigint
+                  constraints:
+                    nullable: false
 
         - createSequence:
             sequenceName: s_address
@@ -57,3 +65,10 @@ databaseChangeLog:
             columnName: id
             defaultValueSequenceNext: s_address
             tableName: address
+
+        - addForeignKeyConstraint:
+            baseTableName: address
+            baseColumnNames: customer_id
+            referencedTableName: customer
+            referencedColumnNames: id
+            constraintName: address_fk0

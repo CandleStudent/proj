@@ -14,30 +14,28 @@ import ru.delivery.dto.NewOrderDto;
 import ru.delivery.entity.Order;
 import ru.delivery.entity.OrderItem;
 import ru.delivery.mapper.AddressMapper;
-import ru.delivery.repository.CustomerAddressRepository;
-import ru.delivery.repository.CustomerRepository;
-import ru.delivery.repository.MenuItemRepository;
-import ru.delivery.repository.OrderRepository;
+import ru.delivery.service.crud.AddressCrudService;
+import ru.delivery.service.crud.CustomerCrudService;
+import ru.delivery.service.crud.MenuItemCrudService;
+import ru.delivery.service.crud.OrderCrudService;
 
 @Service
 @RequiredArgsConstructor
 
 public class OrderService {
 
-  private final CustomerRepository customerRepository;
+  private final CustomerCrudService customerCrudService;
   private final AddressMapper addressMapper;
-  private final CustomerAddressRepository customerAddressRepository;
-  private final MenuItemRepository menuItemRepository;
-  private final OrderRepository orderRepository;
+  private final AddressCrudService addressCrudService;
+  private final MenuItemCrudService menuItemCrudService;
+  private final OrderCrudService orderCrudService;
 
 
   @Transactional
   public void makeOrder(String userEmail, @Valid NewOrderDto newOrderDto) {
-    var customer = customerRepository.findByEmailWithAddresses(userEmail)
-        .orElseThrow(() -> new RuntimeException("Customer not found"));
+    var customer = customerCrudService.getByEmailWithAddresses(userEmail);
 
-    var address = customerAddressRepository.findById(newOrderDto.getCustomerAddressId())
-        .orElseThrow(() -> new RuntimeException("Address not found"));
+    var address = addressCrudService.getById(newOrderDto.getCustomerAddressId());
 
     var order = new Order()
         .setCustomer(customer)
@@ -48,8 +46,7 @@ public class OrderService {
     BigDecimal cost = BigDecimal.ZERO;
     for (var item: newOrderDto.getMenuItems()) {
 
-      var menuItem = menuItemRepository.findById(item.getId())
-          .orElseThrow(() -> new RuntimeException("MenuItem not found"));
+      var menuItem = menuItemCrudService.getById(item.getId());
 
       OrderItem orderItem = new OrderItem()
           .setOrder(order)
@@ -58,24 +55,25 @@ public class OrderService {
           .setMenuItem(menuItem);
 
       order.addItem(orderItem);
+
       cost = cost.add(orderItem.getCost().multiply(BigDecimal.valueOf(orderItem.getAmount())));
     }
     order.setCost(cost);
 
-    orderRepository.save(order);
+    orderCrudService.saveOrUpdate(order);
   }
 
   @Transactional
   public List<ActiveOrderDto> getActiveOrders(String userEmail) {
-    var customer = customerRepository.findByEmailWithAddresses(userEmail)
-        .orElseThrow(() -> new RuntimeException("Customer not found"));
+    var customer = customerCrudService.getByEmailWithAddresses(userEmail);
 
+    //todo replace with orderMapper
     return customer.getOrders()
         .stream()
         .filter(order -> !order.getStatus().equals(OrderStatus.DONE))
         .map(order -> new ActiveOrderDto()
             .setId(order.getId())
-            .setAddress(addressMapper.addressToAddressDto(order.getCustomerAddress().getAddress()))
+            .setAddress(addressMapper.addressToAddressDto(order.getCustomerAddress()))
             .setPaymentType(order.getPaymentType().toValue())
             .setStatus(order.getStatus().toValue())
             .setCost(order.getCost())

@@ -54,34 +54,38 @@ public class Customer {
       orphanRemoval = true,
       fetch = FetchType.LAZY
   )
-  private List<CustomerAddress> addresses = new ArrayList<>();
+  private List<Address> addresses = new ArrayList<>();
 
-  public void addAddress(CustomerAddress address) {
+  public void addAddress(Address address) {
     addresses.add(address);
-    address.setCustomer(this); // Link the address to this customer
+    address.setCustomer(this);
   }
 
-  public void removeAddress(CustomerAddress address) {
+  public void removeAddress(Address address) {
     addresses.remove(address);
-    address.setCustomer(null); // Unlink the address
+    address.setCustomer(null);
   }
 
   @OneToMany(
-      mappedBy = "customer", // Refers to the 'customer' field in Order
-      cascade = CascadeType.ALL, // Optional: Persist/delete orders when customer is saved/deleted
-      orphanRemoval = true, // Auto-remove orders when removed from this list
+      mappedBy = "customer",
+      cascade = CascadeType.ALL,
+      orphanRemoval = true,
       fetch = FetchType.LAZY
   )
   private List<Order> orders = new ArrayList<>();
 
-  public void addOrder(Order order) {
+  public Customer addOrder(Order order) {
     orders.add(order);
-    order.setCustomer(this); // Link the order to this customer
+    order.setCustomer(this);
+
+    return this;
   }
 
-  public void removeOrder(Order order) {
+  public Customer removeOrder(Order order) {
     orders.remove(order);
-    order.setCustomer(null); // Unlink the order
+    order.setCustomer(null);
+
+    return this;
   }
 
   @PrePersist

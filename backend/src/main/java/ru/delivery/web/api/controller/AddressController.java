@@ -19,7 +19,7 @@ public class AddressController {
 
   private final AddressService addressService;
 
-  @GetMapping()
+  @GetMapping
   public ResponseEntity<?> getAddresses(Principal principal) {
 
     var userEmail = principal.getName();

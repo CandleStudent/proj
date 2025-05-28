@@ -1,4 +1,4 @@
-package ru.delivery;
+package ru.delivery.controller;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -15,6 +15,7 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+import ru.delivery.PostgresContainerTest;
 import ru.delivery.dto.auth.RegisterRequest;
 import ru.delivery.service.UserService;
 

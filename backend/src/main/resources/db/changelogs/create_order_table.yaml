@@ -31,7 +31,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: customer_address_id
+                  name: address_id
                   type: bigint
                   constraints:
                     nullable: false
@@ -64,7 +64,7 @@ databaseChangeLog:
             constraintName: order_fk0
         - addForeignKeyConstraint:
             baseTableName: order
-            baseColumnNames: customer_address_id
-            referencedTableName: customer_address
+            baseColumnNames: address_id
+            referencedTableName: address
             referencedColumnNames: id
             constraintName: order_fk1

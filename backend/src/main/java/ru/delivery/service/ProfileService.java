@@ -7,19 +7,18 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.delivery.dto.CurrentProfileDataDto;
 import ru.delivery.dto.NewProfileDataDto;
 import ru.delivery.mapper.ProfileMapper;
-import ru.delivery.repository.CustomerRepository;
+import ru.delivery.service.crud.CustomerCrudService;
 
 @Service
 @RequiredArgsConstructor
 public class ProfileService {
 
-  private final CustomerRepository customerRepository;
+  private final CustomerCrudService customerCrudService;
   private final ProfileMapper profileMapper;
 
   @Transactional
   public CurrentProfileDataDto getCurrentProfileData(String userEmail) {
-    var customer = customerRepository.findByEmail(userEmail)
-        .orElseThrow(() -> new RuntimeException("customer not found"));
+    var customer = customerCrudService.getByEmail(userEmail);
     var currentProfileData = profileMapper.customerAndEmailToCurrentProfileDataDto(customer);
 
     return currentProfileData;
@@ -27,13 +26,12 @@ public class ProfileService {
 
   @Transactional
   public void updateProfileData(String userEmail, @Valid NewProfileDataDto profileData) {
-    var customer = customerRepository.findByEmail(userEmail)
-        .orElseThrow(() -> new RuntimeException("customer not found"));
+    var customer = customerCrudService.getByEmail(userEmail);
     customer
         .setName(profileData.getName())
         .setSurname(profileData.getSurname())
         .setPhone(profileData.getPhone());
 
-    customerRepository.save(customer);
+    customerCrudService.saveOrUpdate(customer);
   }
 }

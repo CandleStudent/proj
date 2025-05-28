@@ -47,9 +47,11 @@ public class Order {
   private Customer customer;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "customer_address_id", nullable = false,
+  @JoinColumn(
+      name = "address_id",
+      nullable = false,
       foreignKey = @ForeignKey(name = "order_fk1"))
-  private CustomerAddress customerAddress;
+  private Address customerAddress;
 
   @Column(name = "payment_type", nullable = false, length = 20)
   @Enumerated(EnumType.STRING)
@@ -63,8 +65,8 @@ public class Order {
   private BigDecimal cost;
 
   @OneToMany(
-      mappedBy = "order", // Refers to the 'order' field in OrderItem
-      cascade = CascadeType.ALL, // Optional: Persist/delete items when order is saved/deleted
+      mappedBy = "order",
+      cascade = CascadeType.ALL,
       orphanRemoval = true,
       fetch = FetchType.LAZY
   )
@@ -72,13 +74,13 @@ public class Order {
 
   public void addItem(OrderItem item) {
     items.add(item);
-    item.setOrder(this); // Link the item to this order
+    item.setOrder(this);
   }
 
-  public void removeItem(OrderItem item) {
-    items.remove(item);
-    item.setOrder(null); // Unlink the item
-  }
+//  public void removeItem(OrderItem item) {
+//    items.remove(item);
+//    item.setOrder(null);
+//  }
 
   @PrePersist
   public void prePersist() {

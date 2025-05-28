@@ -6,13 +6,14 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants.ComponentModel;
 import ru.delivery.dto.AddressDto;
 import ru.delivery.entity.Address;
+import ru.delivery.entity.Customer;
 
 @Mapper(componentModel = ComponentModel.SPRING)
 public interface AddressMapper {
 
   @Mapping(target = "rowUpdateTime", ignore = true)
   @Mapping(target = "id", ignore = true)
-  Address addressDtoToAddress(AddressDto addressDto);
+  Address addressDtoToAddress(AddressDto addressDto, Customer customer);
 
   AddressDto addressToAddressDto(Address address);
 

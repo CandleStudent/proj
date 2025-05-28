@@ -1,50 +1,33 @@
 package ru.delivery.service;
 
 import jakarta.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.delivery.dto.AddressDto;
-import ru.delivery.entity.CustomerAddress;
 import ru.delivery.mapper.AddressMapper;
-import ru.delivery.repository.AddressRepository;
-import ru.delivery.repository.CustomerRepository;
+import ru.delivery.service.crud.CustomerCrudService;
 
 @Service
 @RequiredArgsConstructor
-
 public class AddressService {
 
-  private final CustomerRepository customerRepository;
+  private final CustomerCrudService customerCrudService;
   private final AddressMapper addressMapper;
-  private final AddressRepository addressRepository;
 
   @Transactional
   public void addAddress(String userEmail, @Valid AddressDto addressDto) {
-    var customer = customerRepository.findByEmailWithAddresses(userEmail)
-        .orElseThrow(() -> new RuntimeException("Customer not found"));
-    var address = addressRepository.save(addressMapper.addressDtoToAddress(addressDto));
-    customer.addAddress(
-        new CustomerAddress()
-            .setAddress(address)
-            .setCustomer(customer)
-            .setComment(addressDto.getComment()));
-    customerRepository.save(customer);
+    var customer = customerCrudService.getByEmailWithAddresses(userEmail);
+    customer.addAddress(addressMapper.addressDtoToAddress(addressDto, customer));
+    customerCrudService.saveOrUpdate(customer);
   }
 
   @Transactional(readOnly = true)
   public List<AddressDto> getCurrentAddresses(String userEmail) {
-    var customer = customerRepository.findByEmailWithAddresses(userEmail)
-        .orElseThrow(() -> new RuntimeException("Customer not found"));
+    var customer = customerCrudService.getByEmailWithAddresses(userEmail);
 
-    List<AddressDto> dtos = new ArrayList<>();
-    for (var customerAddress: customer.getAddresses()) {
-      var dto = addressMapper.addressToAddressDto(customerAddress.getAddress());
-      dto.setId(customerAddress.getId());
-      dtos.add(dto);
-    }
-    return dtos;
+    return addressMapper.addressesToAddressDtos(customer.getAddresses());
   }
+
 }

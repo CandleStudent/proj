@@ -22,7 +22,9 @@ public class OrderItem {
   private LocalDateTime rowUpdateTime;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "order_id", nullable = false,
+  @JoinColumn(
+      name = "order_id",
+      nullable = false,
       foreignKey = @ForeignKey(name = "order_item_fk0"))
   private Order order;
 
