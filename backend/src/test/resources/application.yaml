@@ -1,7 +1,7 @@
 spring:
   application.name: backend
   datasource:
-    url: ${YUMMY_DATABASE_URL:jdbc:postgresql://db:5432/yummy}
+    url: ${YUMMY_DATABASE_URL:jdbc:postgresql://localhost:5432/yummy}
     username: postgres
     password: yummy
   jpa:
@@ -14,7 +14,7 @@ spring:
         order_inserts: true
         order_updates: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        default_schema: yummy
+        default_schema: public
   liquibase:
     changelog: "classpath:/db/changelog-master.yaml"
-    url: ${YUMMY_DATABASE_URL:jdbc:postgresql://db:5432/yummy}
+#    url: ${YUMMY_DATABASE_URL:jdbc:postgresql://localhost:5432/yummy}
