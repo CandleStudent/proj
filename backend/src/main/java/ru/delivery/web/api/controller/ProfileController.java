@@ -20,17 +20,12 @@ public class ProfileController {
 
   private final ProfileService profileService;
 
-  @GetMapping()
-  public ResponseEntity<?> getProfileData(Principal principal) {
+  @GetMapping
+  public CurrentProfileDataDto getProfileData(Principal principal) {
 
     var userEmail = principal.getName();
     CurrentProfileDataDto currentProfileDataDto = profileService.getCurrentProfileData(userEmail);
-
-    try {
-      return ResponseEntity.ok(currentProfileDataDto);
-    } catch (RuntimeException e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
-    }
+    return currentProfileDataDto;
   }
 
   @PostMapping()
