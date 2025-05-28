@@ -22,3 +22,15 @@ databaseChangeLog:
               - column:
                   name: name
                   value: CUSTOMER
+        - insert:
+            tableName: role
+            columns:
+              - column:
+                  name: name
+                  value: COURIER
+        - insert:
+            tableName: role
+            columns:
+              - column:
+                  name: name
+                  value: RESTAURANT_MASTER
