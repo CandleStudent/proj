@@ -2,6 +2,6 @@ package ru.delivery.dictionary;
 
 public enum Role {
 
-  CUSTOMER;
+  CUSTOMER, RESTAURANT_MASTER, COURIER;
 
 }

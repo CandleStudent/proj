@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.delivery.dictionary.Role;
+import ru.delivery.dictionary.UserStatus;
 import ru.delivery.entity.Customer;
 import ru.delivery.entity.User;
 import ru.delivery.repository.CustomerRepository;
@@ -33,7 +34,8 @@ public class UserService {
     User user = new User()
         .setEmail(email)
         .setPasswordHash(passwordEncoder.encode(password))
-        .setRole(Role.CUSTOMER);
+        .setRole(Role.CUSTOMER)
+        .setStatus(UserStatus.ACTIVE);
     user = userRepository.save(user);
 
     Customer customer = new Customer().setUser(user);

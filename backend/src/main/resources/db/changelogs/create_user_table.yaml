@@ -42,6 +42,11 @@ databaseChangeLog:
                   type: varchar(20)
                   constraints:
                     nullable: false
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
         - createSequence:
             sequenceName: s_user
         - addDefaultValue:

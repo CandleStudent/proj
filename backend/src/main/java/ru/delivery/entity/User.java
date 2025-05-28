@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.delivery.dictionary.Role;
+import ru.delivery.dictionary.UserStatus;
 
 @Entity
 @Table(name = "user")
@@ -39,6 +40,10 @@ public class User implements UserDetails {
   @Column(name = "role", nullable = false)
   @Enumerated(EnumType.STRING)
   private Role role;
+
+  @Column(name = "status", nullable = false)
+  @Enumerated(EnumType.STRING)
+  private UserStatus status;
 
   @PrePersist
   public void prePersist() {
