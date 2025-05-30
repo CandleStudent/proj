@@ -2,8 +2,8 @@ package ru.delivery.web.api.controller;
 
 import jakarta.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,31 +20,22 @@ public class AddressController {
   private final AddressService addressService;
 
   @GetMapping
-  public ResponseEntity<?> getAddresses(Principal principal) {
+  public List<AddressDto> getAddresses(Principal principal) {
 
     var userEmail = principal.getName();
     var addressDto = addressService.getCurrentAddresses(userEmail);
 
-    try {
-      return ResponseEntity.ok(addressDto);
-    } catch (RuntimeException e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
-    }
+    return addressDto;
   }
 
   @PostMapping
-  public ResponseEntity<?> postAddress(
+  public void postAddress(
       Principal principal,
       @Valid @RequestBody AddressDto addressDto) {
 
     var userEmail = principal.getName();
 
-    try {
-      addressService.addAddress(userEmail, addressDto);
-      return ResponseEntity.ok().build();
-    } catch (RuntimeException e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
-    }
+    addressService.addAddress(userEmail, addressDto);
   }
 
 }
