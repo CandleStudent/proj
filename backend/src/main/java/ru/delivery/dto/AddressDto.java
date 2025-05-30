@@ -1,6 +1,7 @@
 package ru.delivery.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -14,6 +15,9 @@ public class AddressDto {
 
   @NotBlank
   @Size(max = 50)
+  @Pattern(
+      regexp = "Казань",
+      message = "Допустимы адреса только в г. Казань")
   private String city;
 
   @NotBlank
