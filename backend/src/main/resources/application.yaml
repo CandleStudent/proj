@@ -23,4 +23,8 @@ spring:
   liquibase:
     changelog: "classpath:/db/changelog-master.yaml"
     driver-class-name: org.postgresql.Driver
+  config:
+    import:
+      - classpath:application-secrets.yaml
+      - classpath:application-integration.yaml
 
