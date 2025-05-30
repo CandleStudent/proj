@@ -81,4 +81,15 @@ public class AddressService {
     return addressMapper.addressesToAddressDtos(customer.getAddresses());
   }
 
+  @Transactional
+  public void deleteAddress(String userEmail, Long id) {
+    var customer = customerCrudService.getByEmailWithAddresses(userEmail);
+    var deletingAddress = customer.getAddresses().stream()
+        .filter(address -> address.getId().equals(id))
+        .findAny()
+        .orElseThrow(() -> new BusinessLogicException("Вы пытаетесь удалить не свой адрес"));
+    customer.getAddresses().remove(deletingAddress);
+
+    customerCrudService.saveOrUpdate(customer);
+  }
 }
