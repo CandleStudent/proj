@@ -35,7 +35,7 @@ public class AddressController {
 
     var userEmail = principal.getName();
 
-    addressService.addAddress(userEmail, addressDto);
+    addressService.addOrUpdateAddress(userEmail, addressDto);
   }
 
 }

@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.delivery.dto.AddressDto;
+import ru.delivery.entity.Address;
 import ru.delivery.exception.BusinessLogicException;
 import ru.delivery.mapper.AddressMapper;
 import ru.delivery.service.crud.CustomerCrudService;
@@ -23,21 +24,43 @@ public class AddressService {
   private final YandexSuggestService yandexSuggestService;
 
   @Transactional
-  public void addAddress(String userEmail, @Valid AddressDto addressDto) {
+  public void addOrUpdateAddress(String userEmail, @Valid AddressDto addressDto) {
     addressDto = validateAddressWithGeoSuggester(addressDto);
 
     var customer = customerCrudService.getByEmailWithAddresses(userEmail);
-    customer.addAddress(addressMapper.addressDtoToAddress(addressDto, customer));
+    if (addressDto.getId() == null) {
+      customer.addAddress(addressMapper.addressDtoToAddress(addressDto, customer));
+    } else {
+      final var addressId = addressDto.getId();
+      var changingAddress = customer.getAddresses().stream()
+          .filter(address -> address.getId().equals(addressId)).findAny().orElseThrow(
+              () -> new BusinessLogicException("Среди адресов клиента нет с указанным айди = %s"
+                  .formatted(addressId)));
+      copyFromAddressDtoToAddress(addressDto, changingAddress);
+    }
     customerCrudService.saveOrUpdate(customer);
   }
 
+  private void copyFromAddressDtoToAddress(AddressDto addressDto, Address address) {
+    address.setCity(addressDto.getCity());
+    address.setStreet(addressDto.getStreet());
+    address.setBuilding(addressDto.getBuilding());
+    address.setEntrance(addressDto.getEntrance());
+    address.setFloor(addressDto.getFloor());
+    address.setApartments(addressDto.getApartments());
+    address.setComment(addressDto.getComment());
+  }
+
   /**
-   * Получаемый адрес отправляется в Yandex GeoSuggest, где ищутся соответствия ему.
-   * Если таковое находится, то его мы и заносим в БД
+   * Получаемый адрес отправляется в Yandex GeoSuggest, где ищутся соответствия ему. Если таковое
+   * находится, то его мы и заносим в БД
+   *
    * @param addressDto
    */
   private AddressDto validateAddressWithGeoSuggester(@Valid AddressDto addressDto) {
-    var suggesterResponse = yandexSuggestService.suggest(addressDto.getCity() + " " + addressDto.getStreet() + " " + addressDto.getBuilding()).block();
+    var suggesterResponse = yandexSuggestService.suggest(
+            addressDto.getCity() + " " + addressDto.getStreet() + " " + addressDto.getBuilding())
+        .block();
     if (suggesterResponse.getResults().isEmpty()) {
       throw new BusinessLogicException("Некорректный адрес. GeoSuggest не смог найти соответствия");
     }
