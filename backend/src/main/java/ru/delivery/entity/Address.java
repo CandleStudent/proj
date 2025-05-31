@@ -77,4 +77,8 @@ public class Address {
     rowUpdateTime = LocalDateTime.now();
   }
 
+  public String getFormattedAddress() {
+    return this.getCity() + ", " + this.getStreet() + ", " + this.getBuilding();
+  }
+
 }

@@ -84,6 +84,8 @@ public class OrderService {
             .setStatus(order.getStatus().toValue())
             .setCost(order.getCost())
             .setRestaurantId(order.getRestaurant().getId())
+            .setRestaurantFormattedAddress(
+                order.getRestaurant().getAddress().getFormattedAddress())
             .setMenuItems(
                 order.getItems()
                     .stream()
