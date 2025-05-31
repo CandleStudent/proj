@@ -132,7 +132,12 @@ public class OrderService {
         .filter(order -> order.getId().equals(id))
         .findAny()
         .orElseThrow(() -> new BusinessLogicException(
-            "Вы пытаетесь удалить заказ, который не делали"));
+            "Вы пытаетесь отменить заказ, который не делали"));
+    if (deletingOrder.getStatus().equals(OrderStatus.IN_DELIVERY)
+        || deletingOrder.getStatus().equals(OrderStatus.DONE)) {
+      throw new BusinessLogicException("Отменить заказ можно только до поступления в доставку");
+    }
+
     customer.getOrders().remove(deletingOrder);
 
     customerCrudService.saveOrUpdate(customer);
@@ -151,7 +156,7 @@ public class OrderService {
       throw new BusinessLogicException("Заказ уже готовится, его нельзя обновить");
     }
 
-    for (var orderItem: updatingOrder.getItems()) {
+    for (var orderItem : updatingOrder.getItems()) {
       updatingOrder.removeItem(orderItem);
     }
 
