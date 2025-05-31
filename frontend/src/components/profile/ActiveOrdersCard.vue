@@ -79,22 +79,21 @@ export default {
         <button @click="prevOrder" class="text-green-600 hover:underline">&larr; Назад</button>
         <button @click="nextOrder" class="text-green-600 hover:underline">Вперёд &rarr;</button>
       </div>
-    </div>
 
-    <div class="flex space-x-4 mb-4 mt-8 justify-between">
-      <button
-          @click="cancelOrder"
-          class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-      >
-        Отмена заказа
-      </button>
+      <div class="flex space-x-4 mb-4 mt-8 justify-between">
+        <button
+            @click="cancelOrder"
+            class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
+          Отмена заказа
+        </button>
 
-      <button
-          @click="showEditForm = true"
-          class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded"
-      >
-        Изменить заказ
-      </button>
+        <button
+            @click="showEditForm = true"
+            class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded">
+          Изменить заказ
+        </button>
+      </div>
+      
     </div>
 
   </div>
