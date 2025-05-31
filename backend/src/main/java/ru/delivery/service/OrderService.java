@@ -47,7 +47,8 @@ public class OrderService {
         .setCustomer(customer)
         .setCustomerAddress(address)
         .setPaymentType(PaymentType.valueOf(newOrderDto.getPaymentType()))
-        .setStatus(OrderStatus.NEW);
+        .setStatus(OrderStatus.NEW)
+        .setRestaurant(restaurant);
 
     BigDecimal cost = BigDecimal.ZERO;
     for (var item: newOrderDto.getMenuItems()) {
