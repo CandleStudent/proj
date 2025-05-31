@@ -107,11 +107,12 @@ public class OrderService {
             .setId(order.getId())
             .setAddress(addressMapper.addressToAddressDto(order.getCustomerAddress()))
             .setPaymentType(order.getPaymentType().toValue())
-            .setStatus(order.getStatus().toValue())
+            .setStatus(order.getStatus().getStatusDescription())
             .setCost(order.getCost())
             .setRestaurantId(order.getRestaurant().getId())
             .setRestaurantFormattedAddress(
                 order.getRestaurant().getAddress().getFormattedAddress())
+            .setCustomerFormattedAddress(order.getCustomerAddress().getFormattedAddress())
             .setMenuItems(
                 order.getItems()
                     .stream()
