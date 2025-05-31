@@ -10,12 +10,12 @@
 
         <div>
           <label class="block text-sm mb-1 text-gray-600">Имя</label>
-          <input v-model="form.firstName" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Введите имя" />
+          <input v-model="form.name" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Введите имя" />
         </div>
 
         <div>
           <label class="block text-sm mb-1 text-gray-600">Фамилия</label>
-          <input v-model="form.lastName" class="input" placeholder="Введите фамилию" />
+          <input v-model="form.surname" class="input" placeholder="Введите фамилию" />
         </div>
 
         <div>
@@ -72,8 +72,8 @@ export default {
   data() {
     return {
       form: {
-        firstName: '',
-        lastName: '',
+        name: '',
+        surname: '',
         phone: '',
         email: '',
       },
