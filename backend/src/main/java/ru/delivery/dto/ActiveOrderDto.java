@@ -11,6 +11,7 @@ public class ActiveOrderDto {
 
   private Long id;
   private AddressDto address;
+  private String customerFormattedAddress;
   private String paymentType;
   private BigDecimal cost;
   private List<MenuItemDto> menuItems;
