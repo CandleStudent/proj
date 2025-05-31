@@ -11,8 +11,11 @@ import ru.delivery.dictionary.PaymentType;
 import ru.delivery.dto.ActiveOrderDto;
 import ru.delivery.dto.MenuItemDto;
 import ru.delivery.dto.NewOrderDto;
+import ru.delivery.entity.Address;
+import ru.delivery.entity.Customer;
 import ru.delivery.entity.Order;
 import ru.delivery.entity.OrderItem;
+import ru.delivery.entity.Restaurant;
 import ru.delivery.exception.BusinessLogicException;
 import ru.delivery.mapper.AddressMapper;
 import ru.delivery.service.crud.AddressCrudService;
@@ -39,20 +42,34 @@ public class OrderService {
     var customer = customerCrudService.getByEmailWithAddresses(userEmail);
 
     var address = addressCrudService.getById(newOrderDto.getCustomerAddressId());
-    // todo ветвление логики для заказа на самовывоз и доставку
-//    var restaurant = restaurantCrudService.getById(newOrderDto.getRestaurantId());
-    // Доставка. Ресторан определяется автоматически как ближайший todo заменить заглушку на настоящий
-    var restaurant = restaurantCrudService.getById(Long.parseLong("1"));
+    var restaurant = chooseRestaurantForOrder(address);
 
-    var order = new Order()
-        .setCustomer(customer)
+    var order = new Order();
+    order = setOrderDtoDataToOrder(order, newOrderDto, customer, address, restaurant);
+
+    orderCrudService.saveOrUpdate(order);
+  }
+
+  private Restaurant chooseRestaurantForOrder(Address address) {
+    //todo instead of mock do real logic
+    return restaurantCrudService.getById(Long.parseLong("1"));
+  }
+
+  private Order setOrderDtoDataToOrder(
+      Order order,
+      NewOrderDto newOrderDto,
+      Customer customer,
+      Address address,
+      Restaurant restaurant) {
+
+    order.setCustomer(customer)
         .setCustomerAddress(address)
         .setPaymentType(PaymentType.valueOf(newOrderDto.getPaymentType()))
         .setStatus(OrderStatus.NEW)
         .setRestaurant(restaurant);
 
     BigDecimal cost = BigDecimal.ZERO;
-    for (var item: newOrderDto.getMenuItems()) {
+    for (var item : newOrderDto.getMenuItems()) {
 
       var menuItem = menuItemCrudService.getById(item.getId());
 
@@ -68,7 +85,7 @@ public class OrderService {
     }
     order.setCost(cost);
 
-    orderCrudService.saveOrUpdate(order);
+    return order;
   }
 
   @Transactional
@@ -113,4 +130,5 @@ public class OrderService {
 
     customerCrudService.saveOrUpdate(customer);
   }
+
 }
