@@ -7,7 +7,8 @@
         <RouterLink to="/menu" class="menu-btn">Меню</RouterLink>
         <RouterLink to="/profile" class="menu-btn">Профиль</RouterLink>
         <RouterLink to="/cart" class="menu-btn active">Корзина</RouterLink>
-        <button @click="logout" class="menu-btn bg-red-500 text-white hover:bg-red-600">Выход</button>
+        <button @click="logout" class="menu-btn bg-red-500 text-white hover:bg-red-600">Выход
+        </button>
       </nav>
     </header>
 
@@ -48,12 +49,14 @@
                 <button
                     @click="changeQuantity(item, item.quantity - 1)"
                     class="w-8 h-8 bg-gray-200 rounded hover:bg-gray-300 flex items-center justify-center text-lg"
-                >−</button>
+                >−
+                </button>
                 <span class="w-6 text-center">{{ item.quantity }}</span>
                 <button
                     @click="changeQuantity(item, item.quantity + 1)"
                     class="w-8 h-8 bg-gray-200 rounded hover:bg-gray-300 flex items-center justify-center text-lg"
-                >+</button>
+                >+
+                </button>
               </div>
             </div>
           </div>
@@ -100,7 +103,8 @@
         </div>
 
         <!-- Нижняя панель с оплатой и итогом -->
-        <div class="border-t p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-6 sm:space-y-0">
+        <div
+            class="border-t p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-6 sm:space-y-0">
           <div class="flex space-x-6">
             <label class="custom-radio-label">
               <input
@@ -192,21 +196,27 @@ export default {
         this.cart = this.cart.filter((i) => i.id !== item.id);
       } else {
         const target = this.cart.find((i) => i.id === item.id);
-        if (target) target.quantity = newQty;
+        if (target) {
+          target.quantity = newQty;
+        }
       }
       this.saveCart();
     },
     async fetchAddresses() {
       try {
         const token = localStorage.getItem('jwt_token');
-        if (!token) throw new Error('Неавторизован');
+        if (!token) {
+          throw new Error('Неавторизован');
+        }
 
         const response = await fetch(`http://localhost:8080/api/address`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        if (!response.ok) throw new Error('Ошибка при загрузке адресов');
+        if (!response.ok) {
+          throw new Error('Ошибка при загрузке адресов');
+        }
 
         this.addresses = await response.json();
 
@@ -228,12 +238,14 @@ export default {
           return;
         }
         const token = localStorage.getItem('jwt_token');
-        if (!token) throw new Error('Неавторизован');
+        if (!token) {
+          throw new Error('Неавторизован');
+        }
 
         const orderPayload = {
           customerAddressId: this.selectedAddressId,
           paymentType: this.paymentMethod,
-          menuItems: this.cart.map(({ id, quantity }) => ({
+          menuItems: this.cart.map(({id, quantity}) => ({
             id,
             amount: quantity,
           })),
@@ -247,7 +259,9 @@ export default {
           },
           body: JSON.stringify(orderPayload),
         });
-        if (!response.ok) throw new Error('Ошибка оформления заказа');
+        if (!response.ok) {
+          throw new Error('Ошибка оформления заказа');
+        }
 
         alert('Заказ успешно оформлен!');
         this.cart = [];
@@ -287,4 +301,31 @@ export default {
 </script>
 
 
-<style scoped> .menu-btn { padding: 0.5rem 1rem; font-weight: 600; color: #2d6a4f; border-radius: 0.375rem; transition: background-color 0.3s; } .menu-btn:hover { background-color: #95d5b2; color: #1b4332; } .menu-btn.active { background-color: #52b788; color: white; } .custom-radio-label input:checked + span { background-color: #f6ad55; /* желтый */ color: white; } .custom-radio-label span { user-select: none; } </style>
+<style scoped>
+.menu-btn {
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  color: #2d6a4f;
+  border-radius: 0.375rem;
+  transition: background-color 0.3s;
+}
+
+.menu-btn:hover {
+  background-color: #95d5b2;
+  color: #1b4332;
+}
+
+.menu-btn.active {
+  background-color: #52b788;
+  color: white;
+}
+
+.custom-radio-label input:checked + span {
+  background-color: #f6ad55; /* желтый */
+  color: white;
+}
+
+.custom-radio-label span {
+  user-select: none;
+}
+</style>
