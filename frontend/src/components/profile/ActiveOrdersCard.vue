@@ -57,6 +57,8 @@ export default {
         <p><strong>ID заказа:</strong> {{ currentOrder.id }}</p>
         <p><strong>Сумма:</strong> {{ currentOrder.cost }} ₽</p>
         <p><strong>Статус:</strong> {{ currentOrder.status }}</p>
+        <p><strong>Адрес доставки:</strong> {{ currentOrder.customerFormattedAddress }}</p>
+        <p><strong>Адрес ресторана:</strong> {{ currentOrder.restaurantFormattedAddress }}</p>
       </div>
 
       <div class="flex justify-between">
