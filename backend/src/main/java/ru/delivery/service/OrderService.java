@@ -147,6 +147,10 @@ public class OrderService {
         .orElseThrow(() -> new BusinessLogicException(
             "Вы пытаетесь изменить заказ, который не делали"));
 
+    if (!OrderStatus.NEW.equals(updatingOrder.getStatus())) {
+      throw new BusinessLogicException("Заказ уже готовится, его нельзя обновить");
+    }
+
     for (var orderItem: updatingOrder.getItems()) {
       updatingOrder.removeItem(orderItem);
     }
