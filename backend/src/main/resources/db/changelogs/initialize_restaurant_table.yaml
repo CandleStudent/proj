@@ -1,0 +1,110 @@
+databaseChangeLog:
+  - changeSet:
+      id: initialize_restaurant_table
+      author: CandleStudent
+      changes:
+        - insert:
+            tableName: address
+            columns:
+              - column:
+                  name: id
+                  valueSequenceNext: s_address
+              - column:
+                  name: row_insert_time
+                  valueComputed: now()
+              - column:
+                  name: row_update_time
+                  valueComputed: now()
+              - column:
+                  name: city
+                  value: "Казань"
+              - column:
+                  name: street
+                  value: "улица Баумана"
+              - column:
+                  name: building
+                  value: "64/10"
+              - column:
+                  name: lon
+                  value: "49.116644"
+              - column:
+                  name: lat
+                  value: "55.789558"
+              - column:
+                  name: comment
+                  value: "Main restaurant location"
+              - column:
+                  name: customer_id
+                  value: NULL
+
+        - insert:
+            tableName: restaurant
+            columns:
+              - column:
+                  name: id
+                  valueSequenceNext: s_restaurant
+              - column:
+                  name: row_insert_time
+                  valueComputed: now()
+              - column:
+                  name: row_update_time
+                  valueComputed: now()
+              - column:
+                  name: comment
+                  value: "Flagship restaurant"
+              - column:
+                  name: address_id
+                  valueComputed: "(SELECT id FROM address WHERE street = 'улица Баумана' AND building = '64/10')"
+
+        - insert:
+            tableName: address
+            columns:
+              - column:
+                  name: id
+                  valueSequenceNext: s_address
+              - column:
+                  name: row_insert_time
+                  valueComputed: now()
+              - column:
+                  name: row_update_time
+                  valueComputed: now()
+              - column:
+                  name: city
+                  value: "Казань"
+              - column:
+                  name: street
+                  value: "улица Ершова"
+              - column:
+                  name: building
+                  value: "4/2"
+              - column:
+                  name: lon
+                  value: "49.152296"
+              - column:
+                  name: lat
+                  value: "55.792322"
+              - column:
+                  name: comment
+                  value: "Another restaurant location"
+              - column:
+                  name: customer_id
+                  value: NULL
+
+        - insert:
+            tableName: restaurant
+            columns:
+              - column:
+                  name: id
+                  valueSequenceNext: s_restaurant
+              - column:
+                  name: row_insert_time
+                  valueComputed: now()
+              - column:
+                  name: row_update_time
+                  valueComputed: now()
+              - column:
+                  name: comment
+                  value: "Another restaurant"
+              - column:
+                  name: address_id
+                  valueComputed: "(SELECT id FROM address WHERE street = 'улица Ершова' AND building = '4/2')"

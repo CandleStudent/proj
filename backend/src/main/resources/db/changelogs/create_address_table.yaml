@@ -5,7 +5,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: address
-            remarks: таблица с данными о пользователях
+            remarks: таблица с данными об адресах
             columns:
               - column:
                   name: id
@@ -57,7 +57,7 @@ databaseChangeLog:
                   name: customer_id
                   type: bigint
                   constraints:
-                    nullable: false
+                    nullable: true
 
         - createSequence:
             sequenceName: s_address
