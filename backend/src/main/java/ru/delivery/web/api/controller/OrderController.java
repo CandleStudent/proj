@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.delivery.dto.NewOrderDto;
+import ru.delivery.dto.UpdatedOrderDto;
 import ru.delivery.service.OrderService;
 
 @RestController
@@ -47,6 +48,16 @@ public class OrderController {
     } catch (RuntimeException e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
+  }
+
+  @PostMapping("/update")
+  public void updateOrder(
+      Principal principal,
+      @Valid @RequestBody UpdatedOrderDto updatedOrderDto) {
+
+    var userEmail = principal.getName();
+
+    orderService.updateOrder(userEmail, updatedOrderDto);
   }
 
   @DeleteMapping("/cancel/{id}")

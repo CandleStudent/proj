@@ -11,6 +11,7 @@ import ru.delivery.dictionary.PaymentType;
 import ru.delivery.dto.ActiveOrderDto;
 import ru.delivery.dto.MenuItemDto;
 import ru.delivery.dto.NewOrderDto;
+import ru.delivery.dto.UpdatedOrderDto;
 import ru.delivery.entity.Address;
 import ru.delivery.entity.Customer;
 import ru.delivery.entity.Order;
@@ -68,8 +69,14 @@ public class OrderService {
         .setStatus(OrderStatus.NEW)
         .setRestaurant(restaurant);
 
+    order = setOrderContentFromDto(order, newOrderDto.getMenuItems());
+
+    return order;
+  }
+
+  private Order setOrderContentFromDto(Order order, List<MenuItemDto> menuItems) {
     BigDecimal cost = BigDecimal.ZERO;
-    for (var item : newOrderDto.getMenuItems()) {
+    for (var item : menuItems) {
 
       var menuItem = menuItemCrudService.getById(item.getId());
 
@@ -129,6 +136,23 @@ public class OrderService {
     customer.getOrders().remove(deletingOrder);
 
     customerCrudService.saveOrUpdate(customer);
+  }
+
+  @Transactional
+  public void updateOrder(String userEmail, @Valid UpdatedOrderDto updatedOrderDto) {
+    var customer = customerCrudService.getByEmailWithOrders(userEmail);
+    var updatingOrder = customer.getOrders().stream()
+        .filter(order -> order.getId().equals(updatedOrderDto.getId()))
+        .findAny()
+        .orElseThrow(() -> new BusinessLogicException(
+            "Вы пытаетесь изменить заказ, который не делали"));
+
+    for (var orderItem: updatingOrder.getItems()) {
+      updatingOrder.removeItem(orderItem);
+    }
+
+    updatingOrder = setOrderContentFromDto(updatingOrder, updatedOrderDto.getMenuItems());
+    orderCrudService.saveOrUpdate(updatingOrder);
   }
 
 }
