@@ -15,8 +15,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import LoginForm from './LoginForm.vue'
-import RegisterForm from './RegisterForm.vue'
+import LoginForm from '../components/auth/LoginForm.vue'
+import RegisterForm from '../components/auth/RegisterForm.vue'
 
 const isRegistering = ref(true)
 const toggleMode = () => (isRegistering.value = !isRegistering.value)

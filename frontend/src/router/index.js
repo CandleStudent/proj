@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ProfileForm from '@/components/ProfileForm.vue'
-import MenuForm from '@/components/MenuForm.vue'
-import CartForm from '@/components/CartForm.vue'
-import AuthForm from "@/components/AuthForm.vue";
+import ProfileForm from '@/view/ProfileForm.vue'
+import MenuForm from '@/view/MenuForm.vue'
+import CartForm from '@/view/CartForm.vue'
+import AuthForm from "@/view/AuthForm.vue";
 
 const routes = [
   { path: '/auth', component: AuthForm },

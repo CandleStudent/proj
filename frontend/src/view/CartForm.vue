@@ -156,7 +156,7 @@
 </template>
 
 <script>
-import AddAddressModal from '@/components/AddAddressModal.vue';
+import AddAddressModal from '@/components/addresses/AddAddressModal.vue';
 
 export default {
   components: {
