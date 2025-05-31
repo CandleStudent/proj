@@ -35,6 +35,20 @@ export default {
     },
     nextOrder() {
       if (this.orderIndex < this.orders.length - 1) this.orderIndex++
+    },
+    async cancelOrder() {
+      try {
+        const token = localStorage.getItem('jwt_token')
+        const res = await axios.delete(`http://localhost:8080/api/order/cancel/${this.orders[this.orderIndex].id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+
+        alert('Заказ отменён')
+      } catch (e) {
+        alert(e.message || 'Ошибка при отмене заказа')
+      }
+      // Обновляем список заказов
+      await this.fetchOrders()
     }
   },
   mounted() {
@@ -66,6 +80,23 @@ export default {
         <button @click="nextOrder" class="text-green-600 hover:underline">Вперёд &rarr;</button>
       </div>
     </div>
+
+    <div class="flex space-x-4 mb-4 mt-8 justify-between">
+      <button
+          @click="cancelOrder"
+          class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+      >
+        Отмена заказа
+      </button>
+
+      <button
+          @click="showEditForm = true"
+          class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded"
+      >
+        Изменить заказ
+      </button>
+    </div>
+
   </div>
 </template>
 
