@@ -10,46 +10,7 @@
       >
         <!-- Список товаров -->
         <div class="flex-grow overflow-y-auto p-6 space-y-4">
-          <h2 class="text-2xl font-semibold mb-4">Ваша корзина</h2>
-          <div v-if="cart.length === 0" class="text-center text-gray-500 py-20">
-            Нет товаров в корзине
-          </div>
-          <div v-else>
-            <div
-                v-for="item in cart"
-                :key="item.id"
-                class="flex items-center border-b pb-4"
-            >
-              <div
-                  class="w-20 h-20 rounded mr-4 flex-shrink-0 bg-gray-100 flex items-center justify-center overflow-hidden"
-              >
-                <img
-                    :src="item.imageUrl"
-                    :alt="item.name"
-                    class="max-w-full max-h-full object-contain"
-                />
-              </div>
-              <div class="flex-grow">
-                <h3 class="font-semibold">{{ item.name }}</h3>
-                <p class="text-green-700 font-semibold">
-                  {{ (item.price * item.quantity).toLocaleString() }} ₽
-                </p>
-              </div>
-              <div class="flex items-center space-x-2">
-                <button
-                    @click="changeQuantity(item, item.quantity - 1)"
-                    class="w-8 h-8 bg-gray-200 rounded hover:bg-gray-300 flex items-center justify-center text-lg"
-                >−
-                </button>
-                <span class="w-6 text-center">{{ item.quantity }}</span>
-                <button
-                    @click="changeQuantity(item, item.quantity + 1)"
-                    class="w-8 h-8 bg-gray-200 rounded hover:bg-gray-300 flex items-center justify-center text-lg"
-                >+
-                </button>
-              </div>
-            </div>
-          </div>
+          <CartList :cart="cart" :can-edit="true" @update-cart="saveCart" />
         </div>
 
         <!-- Список адресов -->
@@ -99,12 +60,12 @@
             <label class="custom-radio-label">
               <input
                   type="radio"
-                  value="cash"
+                  value="CASH"
                   v-model="paymentMethod"
                   class="hidden"
               />
               <span
-                  :class="{'bg-yellow-400 text-white': paymentMethod === 'cash', 'bg-gray-200': paymentMethod !== 'cash'}"
+                  :class="{'bg-yellow-400 text-white': paymentMethod === 'CASH', 'bg-gray-200': paymentMethod !== 'CASH'}"
                   class="cursor-pointer px-4 py-2 rounded select-none"
               >
                 Наличными
@@ -113,12 +74,12 @@
             <label class="custom-radio-label">
               <input
                   type="radio"
-                  value="card"
+                  value="CARD"
                   v-model="paymentMethod"
                   class="hidden"
               />
               <span
-                  :class="{'bg-yellow-400 text-white': paymentMethod === 'card', 'bg-gray-200': paymentMethod !== 'card'}"
+                  :class="{'bg-yellow-400 text-white': paymentMethod === 'CARD', 'bg-gray-200': paymentMethod !== 'CARD'}"
                   class="cursor-pointer px-4 py-2 rounded select-none"
               >
                 Банковской картой
@@ -152,11 +113,13 @@
 <script>
 import Header from "@/components/Header.vue";
 import AddAddressModal from '@/components/addresses/AddAddressModal.vue';
+import CartList from "@/components/cart/CartList.vue";
 
 export default {
   components: {
     Header,
     AddAddressModal,
+    CartList,
   },
   data() {
     return {
@@ -180,19 +143,9 @@ export default {
       const saved = localStorage.getItem('cart');
       this.cart = saved ? JSON.parse(saved) : [];
     },
-    saveCart() {
+    saveCart(updatedCart) {
+      this.cart = updatedCart
       localStorage.setItem('cart', JSON.stringify(this.cart));
-    },
-    changeQuantity(item, newQty) {
-      if (newQty <= 0) {
-        this.cart = this.cart.filter((i) => i.id !== item.id);
-      } else {
-        const target = this.cart.find((i) => i.id === item.id);
-        if (target) {
-          target.quantity = newQty;
-        }
-      }
-      this.saveCart();
     },
     async fetchAddresses() {
       try {
@@ -257,31 +210,10 @@ export default {
 
         alert('Заказ успешно оформлен!');
         this.cart = [];
-        this.saveCart();
+        this.saveCart(this.cart);
         this.$router.push('/profile');
       } catch (e) {
         alert(e.message || 'Ошибка оформления заказа');
-      }
-    },
-    logout() {
-      localStorage.removeItem('jwt_token');
-      this.$router.push('/login');
-    },
-    parseJwt(token) {
-      try {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(
-            atob(base64)
-            .split('')
-            .map(function (c) {
-              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            })
-            .join('')
-        );
-        return JSON.parse(jsonPayload);
-      } catch {
-        return {};
       }
     },
   },
