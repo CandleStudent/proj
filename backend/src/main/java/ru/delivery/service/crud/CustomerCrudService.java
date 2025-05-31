@@ -26,6 +26,12 @@ public class CustomerCrudService {
             USER_WITH_EMAIL_NOT_FOUND_MSG.formatted(email)));
   }
 
+  public Customer getByEmailWithOrders(String email) {
+    return customerRepository.findByEmailWithOrders(email)
+        .orElseThrow(() -> new EntityNotFoundException(
+            USER_WITH_EMAIL_NOT_FOUND_MSG.formatted(email)));
+  }
+
   public Customer saveOrUpdate(Customer user) {
     return customerRepository.save(user);
   }

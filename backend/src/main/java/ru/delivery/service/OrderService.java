@@ -13,6 +13,7 @@ import ru.delivery.dto.MenuItemDto;
 import ru.delivery.dto.NewOrderDto;
 import ru.delivery.entity.Order;
 import ru.delivery.entity.OrderItem;
+import ru.delivery.exception.BusinessLogicException;
 import ru.delivery.mapper.AddressMapper;
 import ru.delivery.service.crud.AddressCrudService;
 import ru.delivery.service.crud.CustomerCrudService;
@@ -97,5 +98,19 @@ public class OrderService {
                     .toList()
             ))
         .toList();
+  }
+
+  @Transactional
+  public void deleteOrder(String userEmail, Long id) {
+    var customer = customerCrudService.getByEmailWithOrders(userEmail);
+
+    var deletingOrder = customer.getOrders().stream()
+        .filter(order -> order.getId().equals(id))
+        .findAny()
+        .orElseThrow(() -> new BusinessLogicException(
+            "Вы пытаетесь удалить заказ, который не делали"));
+    customer.getOrders().remove(deletingOrder);
+
+    customerCrudService.saveOrUpdate(customer);
   }
 }
