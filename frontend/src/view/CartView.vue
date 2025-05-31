@@ -1,16 +1,6 @@
 <template>
+  <Header />
   <div class="min-h-screen bg-green-50 text-gray-800 flex flex-col">
-    <!-- Header -->
-    <header class="bg-white shadow p-4 flex justify-between items-center sticky top-0 z-30">
-      <div class="text-2xl font-bold text-green-700">Yummy!</div>
-      <nav class="space-x-4">
-        <RouterLink to="/menu" class="menu-btn">Меню</RouterLink>
-        <RouterLink to="/profile" class="menu-btn">Профиль</RouterLink>
-        <RouterLink to="/cart" class="menu-btn active">Корзина</RouterLink>
-        <button @click="logout" class="menu-btn bg-red-500 text-white hover:bg-red-600">Выход
-        </button>
-      </nav>
-    </header>
 
     <!-- Контейнер с негативным пространством по бокам -->
     <div class="flex-grow flex justify-center py-8 px-4 sm:px-8 lg:px-24 xl:px-48">
@@ -160,10 +150,12 @@
 </template>
 
 <script>
+import Header from "@/components/Header.vue";
 import AddAddressModal from '@/components/addresses/AddAddressModal.vue';
 
 export default {
   components: {
+    Header,
     AddAddressModal,
   },
   data() {

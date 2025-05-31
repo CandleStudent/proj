@@ -1,15 +1,6 @@
 <template>
+  <Header />
   <div class="min-h-screen bg-green-50 text-gray-800">
-    <!-- Header -->
-    <header class="bg-white shadow p-4 flex justify-between items-center sticky top-0 z-30">
-      <div class="text-2xl font-bold text-green-700">Yummy!</div>
-      <nav class="space-x-4">
-        <RouterLink to="/profile" class="menu-btn">Профиль</RouterLink>
-        <RouterLink to="/menu" class="menu-btn">Меню</RouterLink>
-        <RouterLink to="/cart" class="menu-btn">Корзина</RouterLink>
-        <button @click="logout" class="menu-btn bg-red-500 text-white hover:bg-red-600">Выход</button>
-      </nav>
-    </header>
 
     <!-- Category Filter (fixed top under header) -->
     <div
@@ -65,9 +56,11 @@
 </template>
 
 <script>
+import Header from "@/components/Header.vue";
 import { menuItems } from '@/data/menu_items.js';
 
 export default {
+  components: {Header},
   data() {
     return {
       dishes: [],

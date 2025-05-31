@@ -1,14 +1,6 @@
 <template>
+  <Header />
   <div class="min-h-screen bg-green-50 text-gray-800 font-sans">
-    <!-- Хедер -->
-    <header class="bg-white shadow p-4 flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-green-700">Yummy!</h1>
-      <div class="flex gap-4">
-        <button class="header-btn" @click="goToMenu">Меню</button>
-        <button class="header-btn" @click="goToCart">Корзина</button>
-        <button class="header-btn" @click="logout">Выход</button>
-      </div>
-    </header>
 
     <!-- Основной контент -->
     <main class="flex flex-col lg:flex-row p-8 gap-8 justify-center items-start">
@@ -68,6 +60,7 @@
 
 <script>
 import axios from 'axios'
+import Header from "@/components/Header.vue"
 
 // Вынесенные переменные
 const API_HOST = 'http://localhost:8080'
@@ -75,6 +68,7 @@ const PROFILE_ENDPOINT = '/api/profile'
 const ORDERS_ENDPOINT = '/api/order/active'
 
 export default {
+  components: {Header},
   data() {
     return {
       form: {
