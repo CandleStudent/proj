@@ -11,5 +11,6 @@ public class NewOrderDto {
   private Long customerAddressId;
   private String paymentType;
   private List<MenuItemDto> menuItems;
+  private Long restaurantId;
 
 }

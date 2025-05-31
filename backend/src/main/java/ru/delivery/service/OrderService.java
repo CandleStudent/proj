@@ -18,6 +18,7 @@ import ru.delivery.service.crud.AddressCrudService;
 import ru.delivery.service.crud.CustomerCrudService;
 import ru.delivery.service.crud.MenuItemCrudService;
 import ru.delivery.service.crud.OrderCrudService;
+import ru.delivery.service.crud.RestaurantCrudService;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,7 @@ public class OrderService {
   private final AddressCrudService addressCrudService;
   private final MenuItemCrudService menuItemCrudService;
   private final OrderCrudService orderCrudService;
+  private final RestaurantCrudService restaurantCrudService;
 
 
   @Transactional
@@ -36,6 +38,10 @@ public class OrderService {
     var customer = customerCrudService.getByEmailWithAddresses(userEmail);
 
     var address = addressCrudService.getById(newOrderDto.getCustomerAddressId());
+    // todo ветвление логики для заказа на самовывоз и доставку
+//    var restaurant = restaurantCrudService.getById(newOrderDto.getRestaurantId());
+    // Доставка. Ресторан определяется автоматически как ближайший todo заменить заглушку на настоящий
+    var restaurant = restaurantCrudService.getById(Long.parseLong("1"));
 
     var order = new Order()
         .setCustomer(customer)
@@ -77,6 +83,7 @@ public class OrderService {
             .setPaymentType(order.getPaymentType().toValue())
             .setStatus(order.getStatus().toValue())
             .setCost(order.getCost())
+            .setRestaurantId(order.getRestaurant().getId())
             .setMenuItems(
                 order.getItems()
                     .stream()

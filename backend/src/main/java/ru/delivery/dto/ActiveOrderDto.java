@@ -15,5 +15,7 @@ public class ActiveOrderDto {
   private BigDecimal cost;
   private List<MenuItemDto> menuItems;
   private String status;
+  private Long restaurantId;
+  private String restaurantFormattedAddress;
 
 }

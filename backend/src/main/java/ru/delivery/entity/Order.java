@@ -53,6 +53,13 @@ public class Order {
       foreignKey = @ForeignKey(name = "order_fk1"))
   private Address customerAddress;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(
+      name = "restaurant_id",
+      nullable = false,
+      foreignKey = @ForeignKey(name = "order_fk2"))
+  private Restaurant restaurant;
+
   @Column(name = "payment_type", nullable = false, length = 20)
   @Enumerated(EnumType.STRING)
   private PaymentType paymentType;

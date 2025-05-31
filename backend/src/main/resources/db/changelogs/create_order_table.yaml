@@ -36,6 +36,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: restaurant_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
                   name: payment_type
                   type: varchar(20)
                   constraints:
@@ -68,3 +73,9 @@ databaseChangeLog:
             referencedTableName: address
             referencedColumnNames: id
             constraintName: order_fk1
+        - addForeignKeyConstraint:
+            baseTableName: order
+            baseColumnNames: restaurant_id
+            referencedTableName: restaurant
+            referencedColumnNames: id
+            constraintName: order_fk2
