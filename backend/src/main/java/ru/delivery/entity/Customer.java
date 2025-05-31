@@ -45,7 +45,7 @@ public class Customer {
   @Column(name = "surname")
   private String surname;
 
-  @Column(name = "phone", length = 12)
+  @Column(name = "phone", length = 13)
   private String phone;
 
   @OneToMany(

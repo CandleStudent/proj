@@ -34,7 +34,7 @@ databaseChangeLog:
                   type: varchar(255)
               - column:
                   name: phone
-                  type: varchar(12)
+                  type: varchar(13)
 
         - addForeignKeyConstraint:
             baseTableName: customer
