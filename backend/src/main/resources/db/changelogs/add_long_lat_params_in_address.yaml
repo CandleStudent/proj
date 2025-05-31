@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_long_lat_params_in_address
+      author: CandleStudent
+      changes:
+        - addColumn:
+            tableName: address
+            columns:
+              - column:
+                  name: lat
+                  type: DECIMAL(10, 8)
+                  remarks: "Latitude (e.g., 55.751244)"
+                  constraints:
+                    nullable: true
+              - column:
+                  name: lon
+                  type: DECIMAL(11, 8)
+                  remarks: "Longitude (e.g., 37.618423)"
+                  constraints:
+                    nullable: true

@@ -13,6 +13,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -31,6 +32,12 @@ public class Address {
 
   @Column(name = "row_update_time", nullable = false)
   private LocalDateTime rowUpdateTime;
+
+  @Column(name = "lat", precision = 10, scale = 8)
+  private BigDecimal lat;
+
+  @Column(name = "lon", precision = 11, scale = 8)
+  private BigDecimal lon;
 
   @Column(name = "city", nullable = false, length = 50)
   private String city;

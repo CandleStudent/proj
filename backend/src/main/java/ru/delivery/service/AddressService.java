@@ -49,6 +49,8 @@ public class AddressService {
     address.setFloor(addressDto.getFloor());
     address.setApartments(addressDto.getApartments());
     address.setComment(addressDto.getComment());
+    address.setLat(addressDto.getLat());
+    address.setLon(addressDto.getLon());
   }
 
   /**
