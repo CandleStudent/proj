@@ -8,7 +8,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class UpdatedOrderDto {
 
-  private Long id;
   private List<MenuItemDto> menuItems;
 
 }

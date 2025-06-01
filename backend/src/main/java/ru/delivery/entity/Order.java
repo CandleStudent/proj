@@ -89,6 +89,10 @@ public class Order {
     item.setOrder(null);
   }
 
+  public void clearItems() {
+    items.clear();
+  }
+
   @PrePersist
   public void prePersist() {
     rowUpdateTime = LocalDateTime.now();

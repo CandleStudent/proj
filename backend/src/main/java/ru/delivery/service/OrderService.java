@@ -157,9 +157,7 @@ public class OrderService {
       throw new BusinessLogicException("Заказ уже готовится, его нельзя обновить");
     }
 
-    for (var orderItem : updatingOrder.getItems()) {
-      updatingOrder.removeItem(orderItem);
-    }
+    updatingOrder.clearItems();
 
     updatingOrder = setOrderContentFromDto(updatingOrder, updatedOrderDto.getMenuItems());
     orderCrudService.saveOrUpdate(updatingOrder);
