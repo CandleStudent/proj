@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-[#f3fdf5] flex flex-col">
     <header class="w-full py-6 text-center bg-white shadow">
-      <h1 class="text-2xl font-bold text-green-700">🍽️ Yummy!</h1>
+      <h1 class="text-2xl font-bold text-green-700">🍽Yummy!</h1>
     </header>
 
     <div class="flex-grow flex items-center justify-center relative">
