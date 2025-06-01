@@ -4,7 +4,7 @@
       <h1 class="text-2xl font-bold text-green-700">🍽️ Yummy!</h1>
     </header>
 
-    <div class="flex-grow flex items-center justify-center">
+    <div class="flex-grow flex items-center justify-center relative">
       <transition name="slide-fade" mode="out-in">
         <LoginForm v-if="!isRegistering" :on-toggle="toggleMode" key="login" />
         <RegisterForm v-else :on-toggle="toggleMode" key="register" />
