@@ -92,7 +92,7 @@ export default {
         this.$emit('updated')
         this.$emit('close')
       } catch (e) {
-        alert(e.message || 'Ошибка при обновлении заказа')
+        alert(e.response.data || 'Ошибка при обновлении заказа')
       }
     },
     updateEditedCart(newCart) {
