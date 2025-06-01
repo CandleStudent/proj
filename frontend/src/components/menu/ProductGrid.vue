@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Category Filter -->
-    <div class="bg-green-100 sticky top-[64px] z-20 flex justify-center py-3 shadow-inner">
+    <div class="bg-green-100 z-20 flex justify-center py-3 shadow-inner">
       <button
           v-for="cat in categories"
           :key="cat"
