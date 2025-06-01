@@ -210,7 +210,7 @@ export default {
 
   <AddDishes
       v-if="showAddDishes"
-      :initial-cart="this.editedItems"
+      :initial-cart="this.cartForAdd"
       @close="showAddDishes = false"
       @cancelled="handleAddDishesCancel"
       @saved="handleAddDishesSave"
