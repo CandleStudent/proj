@@ -104,10 +104,6 @@ export default {
         this.cart = JSON.parse(saved);
       }
     },
-    logout() {
-      localStorage.removeItem('jwt_token');
-      this.$router.push('/login');
-    },
   },
   mounted() {
     this.dishes = menuItems;
