@@ -104,6 +104,7 @@ export default {
       :order="currentOrder"
       @close="showOrderDetails = false"
       @cancelled="updateActiveOrders"
+      @updated="updateActiveOrders"
   />
 </template>
 

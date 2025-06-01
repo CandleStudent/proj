@@ -89,6 +89,7 @@ export default {
         })
 
         alert('Заказ обновлён')
+        this.$emit('updated')
         this.$emit('close')
       } catch (e) {
         alert(e.message || 'Ошибка при обновлении заказа')
