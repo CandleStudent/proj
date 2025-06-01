@@ -85,7 +85,7 @@ export default {
           <button
               @click="cancelOrder"
               class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
-            Отмена заказа
+            Отменить заказ
           </button>
 
           <button
