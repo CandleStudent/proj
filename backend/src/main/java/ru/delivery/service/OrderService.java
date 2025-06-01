@@ -145,10 +145,10 @@ public class OrderService {
   }
 
   @Transactional
-  public void updateOrder(String userEmail, @Valid UpdatedOrderDto updatedOrderDto) {
+  public void updateOrder(String userEmail, Long id, @Valid UpdatedOrderDto updatedOrderDto) {
     var customer = customerCrudService.getByEmailWithOrders(userEmail);
     var updatingOrder = customer.getOrders().stream()
-        .filter(order -> order.getId().equals(updatedOrderDto.getId()))
+        .filter(order -> order.getId().equals(id))
         .findAny()
         .orElseThrow(() -> new BusinessLogicException(
             "Вы пытаетесь изменить заказ, который не делали"));
