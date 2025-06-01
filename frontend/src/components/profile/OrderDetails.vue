@@ -63,7 +63,9 @@ export default {
         this.$emit('cancelled')
         this.$emit('close')
       } catch (e) {
-        alert(e.message || 'Ошибка при отмене заказа')
+        alert(e.response.data || 'Ошибка при отмене заказа')
+        this.$emit('updated')
+        this.$emit('close')
       }
     },
     startEditing() {
@@ -93,6 +95,8 @@ export default {
         this.$emit('close')
       } catch (e) {
         alert(e.response.data || 'Ошибка при обновлении заказа')
+        this.$emit('updated')
+        this.$emit('close')
       }
     },
     updateEditedCart(newCart) {
