@@ -1,6 +1,6 @@
 <script>
 import CartList from '../cart/CartList.vue'
-import { menuItems } from '@/data/menu_items.js'
+import {menuItems} from '@/data/menu_items.js'
 import axios from "axios";
 
 export default {
@@ -26,6 +26,14 @@ export default {
           quantity: item.amount
         }
       })
+    },
+    canBeCancelled() {
+      const cancellableStatuses = ['Приняли в работу', 'Готовим', 'Собираем']
+      return cancellableStatuses.includes(this.order.status)
+    },
+    canBeEdited() {
+      const editableStatuses = ['Приняли в работу']
+      return editableStatuses.includes(this.order.status)
     }
   },
   methods: {
@@ -33,7 +41,7 @@ export default {
       try {
         const token = localStorage.getItem('jwt_token')
         const res = await axios.delete(`http://localhost:8080/api/order/cancel/${this.order.id}`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: {Authorization: `Bearer ${token}`}
         })
 
         alert('Заказ отменён')
@@ -79,19 +87,31 @@ export default {
         <p><strong>Сумма:</strong> {{ order.cost }} ₽</p>
 
         <div class="mt-4">
-          <CartList :cart="cartItems" :canEdit="false" />
+          <CartList :cart="cartItems" :canEdit="false"/>
         </div>
 
         <div class="flex space-x-4 mb-4 mt-8 justify-between">
           <button
               @click="cancelOrder"
-              class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
+              :class="[
+                'px-4 py-2 rounded',
+                canBeCancelled
+                  ? 'bg-red-500 hover:bg-red-600 text-white cursor-pointer'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              ]"
+              :disabled="!canBeCancelled">
             Отменить заказ
           </button>
 
           <button
               @click="showOrderDetails = true"
-              class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded">
+              :class="[
+                'px-4 py-2 rounded',
+                canBeCancelled
+                  ? 'bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              ]"
+              :disabled="!canBeEdited">
             Изменить заказ
           </button>
         </div>
