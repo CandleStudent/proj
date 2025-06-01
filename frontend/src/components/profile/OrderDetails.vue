@@ -35,6 +35,14 @@ export default {
         }
       })
     },
+    calculatedTotalCost() {
+      return this.editMode
+          ? this.editedItems.reduce((sum, item) => {
+            const menuItem = menuItems.find(m => m.id === item.id)
+            return sum + (menuItem?.price || 0) * item.quantity
+          }, 0)
+          : this.order.cost
+    },
     canBeCancelled() {
       const cancellableStatuses = ['Приняли в работу', 'Готовим', 'Собираем']
       return cancellableStatuses.includes(this.order.status)
@@ -120,7 +128,7 @@ export default {
         <p><strong>Адрес клиента:</strong> {{ order.customerFormattedAddress }}</p>
         <p><strong>Адрес ресторана:</strong> {{ order.restaurantFormattedAddress }}</p>
         <p><strong>Оплата:</strong> {{ order.paymentType }}</p>
-        <p><strong>Сумма:</strong> {{ order.cost }} ₽</p>
+        <p><strong>Сумма:</strong> {{ calculatedTotalCost }} ₽</p>
 
         <div class="mt-4">
           <CartList
