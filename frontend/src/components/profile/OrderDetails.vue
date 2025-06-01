@@ -2,17 +2,21 @@
 import CartList from '../cart/CartList.vue'
 import {menuItems} from '@/data/menu_items.js'
 import axios from "axios";
+import AddDishes from "@/components/profile/AddDishes.vue";
 
 const host = 'http://localhost:8080';
 
 export default {
   components: {
+    AddDishes,
     CartList
   },
   data() {
     return {
       editMode: false,
-      editedItems: []
+      editedItems: [],
+      showAddDishes: false,
+      cartForAdd: []
     }
   },
   props: {
@@ -103,7 +107,16 @@ export default {
       this.editedItems = newCart
     },
     addItem() {
-      alert('Заглушка: логика добавления блюда будет позже')
+      this.cartForAdd = [...this.editedItems];
+      this.showAddDishes = true
+    },
+    handleAddDishesCancel() {
+      this.showAddDishes = false;
+    },
+
+    handleAddDishesSave(newCart) {
+      this.editedItems = newCart;
+      this.showAddDishes = false;
     }
   },
   mounted() {
@@ -194,4 +207,12 @@ export default {
       </div>
     </div>
   </div>
+
+  <AddDishes
+      v-if="showAddDishes"
+      :initial-cart="this.editedItems"
+      @close="showAddDishes = false"
+      @cancelled="handleAddDishesCancel"
+      @saved="handleAddDishesSave"
+  />
 </template>
