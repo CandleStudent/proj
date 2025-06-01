@@ -9,6 +9,7 @@
           style="min-height: 60vh;"
       >
         <!-- Список товаров -->
+        <h2 class="text-2xl font-semibold mb-4">Ваша корзина</h2>
         <div class="flex-grow overflow-y-auto p-6 space-y-4">
           <CartList :cart="cart" :can-edit="true" @update-cart="saveCart" />
         </div>

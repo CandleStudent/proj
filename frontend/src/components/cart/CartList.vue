@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h2 class="text-2xl font-semibold mb-4">Ваша корзина</h2>
     <div v-if="cart.length === 0" class="text-center text-gray-500 py-20">
       Нет товаров в корзине
     </div>

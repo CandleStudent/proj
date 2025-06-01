@@ -1,10 +1,12 @@
 <script>
 import axios from 'axios'
+import OrderDetails from "@/components/profile/OrderDetails.vue";
 
 const API_HOST = 'http://localhost:8080'
 const ORDERS_ENDPOINT = '/api/order/active'
 
 export default {
+  components: {OrderDetails},
   data() {
     return {
       form: {
@@ -15,6 +17,7 @@ export default {
       },
       orders: [],
       orderIndex: 0,
+      showOrderDetails: false
     }
   },
   computed: {
@@ -88,15 +91,21 @@ export default {
         </button>
 
         <button
-            @click="showEditForm = true"
+            @click="showOrderDetails = true"
             class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded">
-          Изменить заказ
+          Состав заказа
         </button>
       </div>
-      
+
     </div>
 
   </div>
+
+  <OrderDetails
+      v-if="showOrderDetails"
+      :order="currentOrder"
+      @close="showOrderDetails = false"
+  />
 </template>
 
 <style scoped>
