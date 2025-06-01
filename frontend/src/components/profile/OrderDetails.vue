@@ -72,6 +72,7 @@ export default {
 
         <h2 class="text-xl font-bold mb-4 text-green-700">Состав заказа #{{ order.id }}</h2>
 
+        <p><strong>Статус:</strong> {{ order.status }}</p>
         <p><strong>Адрес клиента:</strong> {{ order.customerFormattedAddress }}</p>
         <p><strong>Адрес ресторана:</strong> {{ order.restaurantFormattedAddress }}</p>
         <p><strong>Оплата:</strong> {{ order.paymentType }}</p>
