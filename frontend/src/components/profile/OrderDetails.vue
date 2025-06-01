@@ -1,6 +1,7 @@
 <script>
 import CartList from '../cart/CartList.vue'
 import { menuItems } from '@/data/menu_items.js'
+import axios from "axios";
 
 export default {
   components: {
@@ -25,6 +26,24 @@ export default {
           quantity: item.amount
         }
       })
+    }
+  },
+  methods: {
+    async cancelOrder() {
+      try {
+        const token = localStorage.getItem('jwt_token')
+        const res = await axios.delete(`http://localhost:8080/api/order/cancel/${this.order.id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+
+        alert('Заказ отменён')
+        this.$emit('cancelled')
+        this.$emit('close')
+      } catch (e) {
+        alert(e.message || 'Ошибка при отмене заказа')
+      }
+      // Обновляем список заказов
+      await this.fetchOrders()
     }
   },
   mounted() {
@@ -61,6 +80,21 @@ export default {
         <div class="mt-4">
           <CartList :cart="cartItems" :canEdit="false" />
         </div>
+
+        <div class="flex space-x-4 mb-4 mt-8 justify-between">
+          <button
+              @click="cancelOrder"
+              class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
+            Отмена заказа
+          </button>
+
+          <button
+              @click="showOrderDetails = true"
+              class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded">
+            Изменить заказ
+          </button>
+        </div>
+
       </div>
     </div>
   </div>

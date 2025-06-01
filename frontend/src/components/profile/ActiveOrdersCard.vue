@@ -26,6 +26,10 @@ export default {
     }
   },
   methods: {
+    async updateActiveOrders() {
+      await this.fetchOrders()
+      this.orderIndex = 0
+    },
     async fetchOrders() {
       const token = localStorage.getItem('jwt_token')
       const res = await axios.get(`${API_HOST}${ORDERS_ENDPOINT}`, {
@@ -83,13 +87,7 @@ export default {
         <button @click="nextOrder" class="text-green-600 hover:underline">Вперёд &rarr;</button>
       </div>
 
-      <div class="flex space-x-4 mb-4 mt-8 justify-between">
-        <button
-            @click="cancelOrder"
-            class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
-          Отмена заказа
-        </button>
-
+      <div class="space-x-4 mb-4 mt-8">
         <button
             @click="showOrderDetails = true"
             class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded">
@@ -105,6 +103,7 @@ export default {
       v-if="showOrderDetails"
       :order="currentOrder"
       @close="showOrderDetails = false"
+      @cancelled="updateActiveOrders"
   />
 </template>
 
