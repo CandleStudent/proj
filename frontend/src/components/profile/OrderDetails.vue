@@ -7,6 +7,11 @@ export default {
   components: {
     CartList
   },
+  data() {
+    return {
+      editMode: false
+    }
+  },
   props: {
     order: {
       type: Object,
@@ -87,7 +92,7 @@ export default {
         <p><strong>Сумма:</strong> {{ order.cost }} ₽</p>
 
         <div class="mt-4">
-          <CartList :cart="cartItems" :canEdit="false"/>
+          <CartList :cart="cartItems" :canEdit="editMode"/>
         </div>
 
         <div class="flex space-x-4 mb-4 mt-8 justify-between">
@@ -104,7 +109,7 @@ export default {
           </button>
 
           <button
-              @click="showOrderDetails = true"
+              @click="editMode = true"
               :class="[
                 'px-4 py-2 rounded',
                 canBeCancelled
