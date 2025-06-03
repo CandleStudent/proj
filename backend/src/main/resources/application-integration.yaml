@@ -1,5 +1,6 @@
 clients:
   yandex.suggester:
+    referer: localhost
     path: /v1/suggest
     lang: ru_RU
     results: 3

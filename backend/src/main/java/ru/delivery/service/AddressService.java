@@ -25,8 +25,7 @@ public class AddressService {
 
   @Transactional
   public void addOrUpdateAddress(String userEmail, @Valid AddressDto addressDto) {
-    // todo временно
-  //  addressDto = validateAddressWithGeoSuggester(addressDto);
+    addressDto = validateAddressWithGeoSuggester(addressDto);
 
     var customer = customerCrudService.getByEmailWithAddresses(userEmail);
     if (addressDto.getId() == null) {

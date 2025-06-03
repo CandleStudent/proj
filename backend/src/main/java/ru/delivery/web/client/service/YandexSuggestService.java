@@ -29,6 +29,7 @@ public class YandexSuggestService {
       .clientConnector(conn)
       .build();
 
+  private String referer;
   private String path;
   private String apikey;
   private String lang;
@@ -49,6 +50,7 @@ public class YandexSuggestService {
             .queryParamIfPresent("types", Optional.ofNullable(types))
             .queryParamIfPresent("print_address", Optional.ofNullable(print_address))
             .build())
+        .header("Referer", referer)
         .retrieve()
         .bodyToMono(YandexSuggestResponse.class);
   }
