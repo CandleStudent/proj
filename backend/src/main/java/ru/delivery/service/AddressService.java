@@ -2,6 +2,7 @@ package ru.delivery.service;
 
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import ru.delivery.exception.BusinessLogicException;
 import ru.delivery.mapper.AddressMapper;
 import ru.delivery.service.crud.CustomerCrudService;
 import ru.delivery.web.client.dto.YandexSuggestResponse;
+import ru.delivery.web.client.service.YandexGeocoderService;
 import ru.delivery.web.client.service.YandexSuggestService;
 
 @Service
@@ -22,11 +24,19 @@ public class AddressService {
   private final CustomerCrudService customerCrudService;
   private final AddressMapper addressMapper;
   private final YandexSuggestService yandexSuggestService;
+  private final YandexGeocoderService yandexGeocoderService;
 
   @Transactional
   public void addOrUpdateAddress(String userEmail, @Valid AddressDto addressDto) {
+    //todo split this method on more specific and SOLID
     addressDto = validateAddressWithGeoSuggester(addressDto);
-
+    var posOfAddress = yandexGeocoderService
+        .getLonLatByAddress(addressDto.getFormattedAddress())
+        .block();
+    var point = Optional.ofNullable(posOfAddress.getPosition())
+        .orElseThrow(() -> new BusinessLogicException("По данному адресу нет географических точек"));
+    addressDto.setLon(point.getLon());
+    addressDto.setLat(point.getLat());
     var customer = customerCrudService.getByEmailWithAddresses(userEmail);
     if (addressDto.getId() == null) {
       customer.addAddress(addressMapper.addressDtoToAddress(addressDto, customer));

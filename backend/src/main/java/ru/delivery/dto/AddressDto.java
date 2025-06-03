@@ -52,4 +52,8 @@ public class AddressDto {
 
   private String comment;
 
+  public String getFormattedAddress() {
+    return "%s, %s, %s".formatted(city, street, building);
+  }
+
 }

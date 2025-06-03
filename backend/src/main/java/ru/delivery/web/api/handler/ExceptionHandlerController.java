@@ -29,4 +29,11 @@ public class ExceptionHandlerController {
     return e.getMessage();
   }
 
+  @ExceptionHandler
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public String errors(IllegalArgumentException e) {
+    log.warn("Некорректные аргументы: {}", e.getMessage());
+    return e.getMessage();
+  }
+
 }

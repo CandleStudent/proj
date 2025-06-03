@@ -1,15 +1,25 @@
 clients:
-  yandex.suggester:
-    referer: localhost
-    path: /v1/suggest
-    lang: ru_RU
-    results: 3
-#    highlight: true
-    ll: 49.106414,55.796127
-#    spn: 0.552069,0.400552
-#    bbox: 48.935699,55.618972~49.307289,55.945282
-#    ull: 49.1221,55.7824
-#    strict_bounds: true
-#    types: geo
-    print_address: 1
-    types: house
+  yandex:
+    suggester:
+      referer: localhost
+      path: /v1/suggest
+      lang: ru_RU
+      results: 3
+  #    highlight: true
+      ll: 49.106414,55.796127
+  #    spn: 0.552069,0.400552
+  #    bbox: 48.935699,55.618972~49.307289,55.945282
+  #    ull: 49.1221,55.7824
+  #    strict_bounds: true
+  #    types: geo
+      print_address: 1
+      types: house
+    geocoder:
+      referer: localhost
+      path: /v1
+      lang: ru_RU
+      results: 1
+      ll: 49.106414,55.796127
+      format: json
+      kind: house
+
