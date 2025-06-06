@@ -1,5 +1,7 @@
 package ru.delivery.service;
 
+import static ru.delivery.utility.GeoUtility.*;
+
 import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
@@ -52,8 +54,18 @@ public class OrderService {
   }
 
   private Restaurant chooseRestaurantForOrder(Address address) {
-    //todo instead of mock do real logic
-    return restaurantCrudService.getById(Long.parseLong("1"));
+    var restaurants = restaurantCrudService.getAllWithAddresses();
+    Restaurant closestRestaurant = null;
+    Double closestDistance = Double.MAX_VALUE;
+    for (var restaurant: restaurants) {
+      var currentDistance = getDistanceBetweenTwoAddresses(address, restaurant.getAddress());
+      if (currentDistance < closestDistance) {
+        closestDistance = currentDistance;
+        closestRestaurant = restaurant;
+      }
+    }
+
+    return closestRestaurant;
   }
 
   private Order setOrderDtoDataToOrder(
