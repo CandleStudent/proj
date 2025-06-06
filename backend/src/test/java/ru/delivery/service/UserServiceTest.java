@@ -60,7 +60,7 @@ public class UserServiceTest extends PostgresContainerTest {
 
     var savedUser = userRepository.findByEmail(registerRequest.getEmail()).get();
     assertEquals("hashedPassword", savedUser.getPassword());
-    assertEquals(Role.CUSTOMER, savedUser.getRole());
+    assertEquals(Role.ROLE_CUSTOMER, savedUser.getRole());
     assertEquals(UserStatus.ACTIVE, savedUser.getStatus());
     var savedCustomer = customerRepository.findByEmail(registerRequest.getEmail()).get();
   }
