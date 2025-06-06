@@ -42,7 +42,6 @@ public class AuthController {
     String password = request.getPassword();
 
     var jwt = userService.login(email, password);
-    ;
 
     return ResponseEntity.ok(new AuthenticationResponse(jwt));
   }
