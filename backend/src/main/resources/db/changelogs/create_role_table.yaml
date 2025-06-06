@@ -21,16 +21,16 @@ databaseChangeLog:
             columns:
               - column:
                   name: name
-                  value: CUSTOMER
+                  value: ROLE_CUSTOMER
         - insert:
             tableName: role
             columns:
               - column:
                   name: name
-                  value: COURIER
+                  value: ROLE_COURIER
         - insert:
             tableName: role
             columns:
               - column:
                   name: name
-                  value: RESTAURANT_MASTER
+                  value: ROLE_RESTAURANT_ADMIN

@@ -33,7 +33,7 @@ public class UserService {
     User user = new User()
         .setEmail(email)
         .setPasswordHash(passwordEncoder.encode(password))
-        .setRole(Role.CUSTOMER)
+        .setRole(Role.ROLE_CUSTOMER)
         .setStatus(UserStatus.ACTIVE);
     user = userCrudService.saveOrUpdate(user);
 
