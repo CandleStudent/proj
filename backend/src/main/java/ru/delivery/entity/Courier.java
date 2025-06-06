@@ -53,7 +53,7 @@ public class Courier {
   @Column(name = "surname")
   private String surname;
 
-  @Column(name = "phone", length = 13)
+  @Column(name = "phone", length = 12)
   private String phone;
 
   @Column(name = "status", nullable = false)

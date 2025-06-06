@@ -28,7 +28,7 @@ databaseChangeLog:
                   type: varchar(255)
               - column:
                   name: phone
-                  type: varchar(13)
+                  type: varchar(12)
               - column:
                   name: status
                   type: varchar(20)
