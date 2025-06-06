@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: init_master_user
+      author: CandleStudent
+      changes:
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  valueSequenceNext: s_user
+              - column:
+                  name: row_insert_time
+                  valueComputed: now()
+              - column:
+                  name: row_update_time
+                  valueComputed: now()
+              - column:
+                  name: email
+                  value: "master@master.ru"
+              - column:
+                  name: password_hash
+                  value: "$2a$10$bE8to1qZo.eLWJsL8Qiny.rXSYyLlajOb0GzgFtZGWte1SKRhfBii" # 1234
+              - column:
+                  name: role
+                  value: "ROLE_MASTER"
+              - column:
+                  name: status
+                  value: "ACTIVE"

@@ -34,3 +34,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: ROLE_RESTAURANT_ADMIN
+        - insert:
+            tableName: role
+            columns:
+              - column:
+                  name: name
+                  value: ROLE_MASTER

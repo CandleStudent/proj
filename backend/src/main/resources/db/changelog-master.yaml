@@ -41,3 +41,6 @@ databaseChangeLog:
   - include:
       relativeToChangeLogFile: true
       file: "changelogs/add_courier_field_to_order_table.yaml"
+  - include:
+      relativeToChangeLogFile: true
+      file: "changelogs/init_master_user.yaml" # for testing purposes master user inserted via liquibase
