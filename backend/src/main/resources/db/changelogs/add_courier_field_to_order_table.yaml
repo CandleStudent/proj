@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_courier_field_to_order_table
+      author: CandleStudent
+      changes:
+        - addColumn:
+            tableName: order
+            columns:
+              - column:
+                  name: courier_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+        - addForeignKeyConstraint:
+            baseTableName: order
+            baseColumnNames: courier_id
+            referencedTableName: courier
+            referencedColumnNames: id
+            constraintName: order_fk3

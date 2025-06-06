@@ -32,3 +32,12 @@ databaseChangeLog:
   - include:
       relativeToChangeLogFile: true
       file: "changelogs/fill_menu_item_table.yaml"
+  - include:
+      relativeToChangeLogFile: true
+      file: "changelogs/create_restaurant_admin_table.yaml"
+  - include:
+      relativeToChangeLogFile: true
+      file: "changelogs/create_courier_table.yaml"
+  - include:
+      relativeToChangeLogFile: true
+      file: "changelogs/add_courier_field_to_order_table.yaml"

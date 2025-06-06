@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_courier_table
+      author: CandleStudent
+      changes:
+        - createTable:
+            tableName: courier
+            remarks: таблица с данными о клиентах сервиса
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: courier_pk
+                    nullable: false
+                    unique: true
+              - column:
+                  name: restaurant_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: surname
+                  type: varchar(255)
+              - column:
+                  name: phone
+                  type: varchar(13)
+              - column:
+                  name: status
+                  type: varchar(20)
+                  remarks: статус занятости курьера, свободен или в доставке
+              - column:
+                  name: row_insert_time
+                  type: datetime
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: row_update_time
+                  type: datetime
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: courier
+            baseColumnNames: id
+            referencedTableName: user
+            referencedColumnNames: id
+            constraintName: courier_fk0
+
+        - addForeignKeyConstraint:
+            baseTableName: courier
+            baseColumnNames: restaurant_id
+            referencedTableName: restaurant
+            referencedColumnNames: id
+            constraintName: courier_fk1

@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_restaurant_admin_table
+      author: CandleStudent
+      changes:
+        - createTable:
+            tableName: restaurant_admin
+            remarks: таблица с данными о клиентах сервиса
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: restaurant_admin_pk
+                    nullable: false
+                    unique: true
+              - column:
+                  name: restaurant_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: row_insert_time
+                  type: datetime
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: row_update_time
+                  type: datetime
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: restaurant_admin
+            baseColumnNames: id
+            referencedTableName: user
+            referencedColumnNames: id
+            constraintName: restaurant_admin_fk0
+
+        - addForeignKeyConstraint:
+            baseTableName: restaurant_admin
+            baseColumnNames: restaurant_id
+            referencedTableName: restaurant
+            referencedColumnNames: id
+            constraintName: restaurant_admin_fk1
