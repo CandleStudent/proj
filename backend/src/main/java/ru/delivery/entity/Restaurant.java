@@ -61,9 +61,32 @@ public class Restaurant {
   }
 
   public Restaurant removeOrder(Order order) {
-    if (!this.orders.isEmpty()) {
+    if (!this.orders.isEmpty() && this.orders.contains(order)) {
       orders.remove(order);
       order.setRestaurant(null);
+    }
+
+    return this;
+  }
+
+  @OneToMany(
+      mappedBy = "restaurant",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.LAZY
+  )
+  private List<Courier> couriers = new ArrayList<>();
+
+  public Restaurant addCourier(Courier courier) {
+    couriers.add(courier);
+    courier.setRestaurant(this);
+
+    return this;
+  }
+
+  public Restaurant removeCourier(Courier courier) {
+    if (!this.couriers.isEmpty() && this.couriers.contains(courier)) {
+      couriers.remove(courier);
+      courier.setRestaurant(null);
     }
 
     return this;

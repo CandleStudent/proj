@@ -23,4 +23,12 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
               left join fetch r.address""")
   List<Restaurant> findAllWithAddress();
 
+  @Query(
+      value = """
+              select r from Restaurant r
+              left join fetch r.address
+              left join fetch r.couriers
+              where r.id= :id""")
+  Optional<Restaurant> findWithAddressAndCouriers(Long id);
+
 }
