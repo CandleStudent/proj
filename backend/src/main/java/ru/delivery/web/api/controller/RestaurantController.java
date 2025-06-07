@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.delivery.dto.RestaurantDto;
 import ru.delivery.service.RestaurantService;
 
+//todo необходимость контроллера под вопросом
 @RestController
 @RequestMapping("/api/restaurant")
 @RequiredArgsConstructor
