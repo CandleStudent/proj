@@ -24,6 +24,7 @@ import ru.delivery.exception.BusinessLogicException;
 import ru.delivery.mapper.AddressMapper;
 import ru.delivery.mapper.OrderMapper;
 import ru.delivery.service.crud.AddressCrudService;
+import ru.delivery.service.crud.CourierCrudService;
 import ru.delivery.service.crud.CustomerCrudService;
 import ru.delivery.service.crud.MenuItemCrudService;
 import ru.delivery.service.crud.OrderCrudService;
@@ -43,6 +44,7 @@ public class OrderService {
   private final OrderCrudService orderCrudService;
   private final RestaurantCrudService restaurantCrudService;
   private final RestaurantAdminCrudService restaurantAdminCrudService;
+  private final CourierCrudService courierCrudService;
 
 
   @Transactional
@@ -249,5 +251,13 @@ public class OrderService {
     updatingOrder = setOrderContentFromDto(updatingOrder, updatedOrderDto.getMenuItems());
     orderCrudService.saveOrUpdate(updatingOrder);
     
+  }
+
+  @Transactional
+  public List<WorkerActiveOrderDto> getCourierActiveOrders(String userEmail) {
+    var courier = courierCrudService.getByEmail(userEmail);
+    var activeOrders = orderCrudService.findByCourierAndStatusIn(courier);
+
+    return orderMapper.ordersToWorkerActiveOrderDtos(activeOrders);
   }
 }
