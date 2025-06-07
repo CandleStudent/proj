@@ -26,4 +26,8 @@ public class OrderCrudService {
     return orderRepository.save(order);
   }
 
+  public void delete(Order order) {
+    orderRepository.delete(order);
+  }
+
 }

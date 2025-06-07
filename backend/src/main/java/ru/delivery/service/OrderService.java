@@ -212,4 +212,21 @@ public class OrderService {
     return orderMapper.orderToWorkerActiveOrderDto(pushedOrder);
   }
 
+  @Transactional
+  public void deleteOrderByAdmin(String userEmail, Long id) {
+    var admin = restaurantAdminCrudService.getByEmail(userEmail);
+    var activeOrders = orderCrudService.findByRestaurantAndStatusIn(admin.getRestaurant());
+
+    var deletingOrder = activeOrders.stream()
+        .filter(order -> order.getId().equals(id))
+        .findAny()
+        .orElseThrow(() -> new BusinessLogicException(
+            "В данном ресторане нет активного заказа с id = %s".formatted(id)));
+    if (deletingOrder.getStatus().equals(OrderStatus.DONE)) {
+      throw new BusinessLogicException("Заказ id = %s завершен, его нельзя удалить".formatted(id));
+    }
+
+    orderCrudService.delete(deletingOrder);
+  }
+  
 }
