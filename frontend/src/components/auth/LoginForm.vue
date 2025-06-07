@@ -8,7 +8,6 @@
         <button type="submit" class="w-full bg-green-700 hover:bg-green-800 text-white py-3 px-4 rounded-md text-base font-semibold transition-colors duration-300">Войти</button>
       </div>
       <div class="text-center text-sm text-gray-600">
-        <a href="#" class="text-green-600 hover:text-green-800 transition-colors duration-300">Забыли пароль?</a>
         <p class="mt-4">Нет аккаунта? <button @click="onToggle" type="button" class="ml-1 text-green-700 font-semibold hover:underline">Зарегистрироваться</button></p>
       </div>
     </form>
