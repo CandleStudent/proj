@@ -260,4 +260,26 @@ public class OrderService {
 
     return orderMapper.ordersToWorkerActiveOrderDtos(activeOrders);
   }
+
+  @Transactional
+  public WorkerActiveOrderDto pushOrderStatusByCourier(String userEmail, Long id) {
+    var courier = courierCrudService.getByEmail(userEmail);
+    var activeOrders = orderCrudService.findByCourierAndStatusIn(courier);
+
+    var pushedOrder = activeOrders.stream()
+        .filter(order -> order.getId().equals(id))
+        .findAny()
+        .orElseThrow(() -> new BusinessLogicException(
+            "У курьера нет активного заказа с id = %s".formatted(id)));
+    if (!OrderStatus.IN_DELIVERY.equals(pushedOrder.getStatus())) {
+      throw new BusinessLogicException(
+          "Курьеру нельзя менять статус заказа, если он не в доставке");
+    }
+
+    var newStatus = OrderStatus.fromOrderNumber(pushedOrder.getStatus().getOrderNumber() + 1);
+    pushedOrder.setStatus(newStatus);
+
+    orderCrudService.saveOrUpdate(pushedOrder);
+    return orderMapper.orderToWorkerActiveOrderDto(pushedOrder);
+  }
 }

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum CourierStatus {
 
-  FREE, IN_DELIVERY, BUSY, INACTIVE;
+  READY, IN_DELIVERY, BUSY, INACTIVE;
 
   @JsonCreator
   public OrderStatus fromValue(String text) {

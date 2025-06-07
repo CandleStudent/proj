@@ -4,9 +4,12 @@ import java.security.Principal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.delivery.dto.WorkerActiveOrderDto;
+import ru.delivery.service.CourierService;
 import ru.delivery.service.OrderService;
 
 @RestController
@@ -15,8 +18,9 @@ import ru.delivery.service.OrderService;
 public class CourierController {
 
   private final OrderService orderService;
+  private final CourierService courierService;
 
-  @GetMapping("/active")
+  @GetMapping("/order/active")
   public List<WorkerActiveOrderDto> getActiveOrders(Principal principal) {
     var userEmail = principal.getName();
 
@@ -24,17 +28,19 @@ public class CourierController {
     return activeOrders;
   }
 
-//  @PutMapping("/push/{id}")
-//  public WorkerActiveOrderDto pushOrderStatus(Principal principal, @PathVariable Long id) {
-//    var userEmail = principal.getName();
-//
-//    var pushedOrder = orderService.pushOrderStatusByCourier(userEmail, id);
-//    return pushedOrder;
-//  }
-//
-//  @PutMapping("/ready")
-//  public void setReadyForDeliveryStatus(Principal principal) {
-//    var userEmail = principal.getName();
-//  }
+  @PutMapping("/order/push/{id}")
+  public WorkerActiveOrderDto pushOrderStatus(Principal principal, @PathVariable Long id) {
+    var userEmail = principal.getName();
+
+    var pushedOrder = orderService.pushOrderStatusByCourier(userEmail, id);
+    return pushedOrder;
+  }
+
+  @PutMapping("/ready")
+  public void setReadyForDeliveryStatus(Principal principal) {
+    var userEmail = principal.getName();
+
+    courierService.setReadyForDeliveryStatus(userEmail);
+  }
 
 }
