@@ -1,6 +1,6 @@
 package ru.delivery.service;
 
-import static ru.delivery.utility.GeoUtility.*;
+import static ru.delivery.utility.GeoUtility.getDistanceBetweenTwoAddresses;
 
 import jakarta.validation.Valid;
 import java.math.BigDecimal;
@@ -14,6 +14,7 @@ import ru.delivery.dto.ActiveOrderDto;
 import ru.delivery.dto.MenuItemDto;
 import ru.delivery.dto.NewOrderDto;
 import ru.delivery.dto.UpdatedOrderDto;
+import ru.delivery.dto.WorkerActiveOrderDto;
 import ru.delivery.entity.Address;
 import ru.delivery.entity.Customer;
 import ru.delivery.entity.Order;
@@ -21,10 +22,12 @@ import ru.delivery.entity.OrderItem;
 import ru.delivery.entity.Restaurant;
 import ru.delivery.exception.BusinessLogicException;
 import ru.delivery.mapper.AddressMapper;
+import ru.delivery.mapper.OrderMapper;
 import ru.delivery.service.crud.AddressCrudService;
 import ru.delivery.service.crud.CustomerCrudService;
 import ru.delivery.service.crud.MenuItemCrudService;
 import ru.delivery.service.crud.OrderCrudService;
+import ru.delivery.service.crud.RestaurantAdminCrudService;
 import ru.delivery.service.crud.RestaurantCrudService;
 
 @Service
@@ -34,10 +37,12 @@ public class OrderService {
 
   private final CustomerCrudService customerCrudService;
   private final AddressMapper addressMapper;
+  private final OrderMapper orderMapper;
   private final AddressCrudService addressCrudService;
   private final MenuItemCrudService menuItemCrudService;
   private final OrderCrudService orderCrudService;
   private final RestaurantCrudService restaurantCrudService;
+  private final RestaurantAdminCrudService restaurantAdminCrudService;
 
 
   @Transactional
@@ -45,6 +50,9 @@ public class OrderService {
     var customer = customerCrudService.getByEmailWithAddresses(userEmail);
 
     var address = addressCrudService.getById(newOrderDto.getCustomerAddressId());
+    if (!customer.getAddresses().contains(address)) {
+      throw new BusinessLogicException("У клиента нет адреса с таким id");
+    }
     var restaurant = chooseRestaurantForOrder(address);
 
     var order = new Order();
@@ -57,7 +65,7 @@ public class OrderService {
     var restaurants = restaurantCrudService.getAllWithAddresses();
     Restaurant closestRestaurant = null;
     Double closestDistance = Double.MAX_VALUE;
-    for (var restaurant: restaurants) {
+    for (var restaurant : restaurants) {
       var currentDistance = getDistanceBetweenTwoAddresses(address, restaurant.getAddress());
       if (currentDistance < closestDistance) {
         closestDistance = currentDistance;
@@ -173,6 +181,14 @@ public class OrderService {
 
     updatingOrder = setOrderContentFromDto(updatingOrder, updatedOrderDto.getMenuItems());
     orderCrudService.saveOrUpdate(updatingOrder);
+  }
+
+  @Transactional
+  public List<WorkerActiveOrderDto> getActiveOrdersInRestaurant(String userEmail) {
+    var admin = restaurantAdminCrudService.getByEmail(userEmail);
+    var activeOrders = orderCrudService.findByRestaurantAndStatusIn(admin.getRestaurant());
+
+    return orderMapper.ordersToWorkerActiveOrderDtos(activeOrders);
   }
 
 }
