@@ -191,4 +191,25 @@ public class OrderService {
     return orderMapper.ordersToWorkerActiveOrderDtos(activeOrders);
   }
 
+  @Transactional
+  public WorkerActiveOrderDto pushOrderStatusByAdmin(String userEmail, Long id) {
+    var admin = restaurantAdminCrudService.getByEmail(userEmail);
+    var activeOrders = orderCrudService.findByRestaurantAndStatusIn(admin.getRestaurant());
+
+    var pushedOrder = activeOrders.stream()
+        .filter(order -> order.getId().equals(id))
+        .findAny()
+        .orElseThrow(() -> new BusinessLogicException(
+            "У ресторана нет активного заказа с id = %s".formatted(id)));
+    if (OrderStatus.DONE.equals(pushedOrder.getStatus())) {
+      throw new BusinessLogicException("Заказ уже выполнен, его статус нельзя поменять");
+    }
+
+    var newStatus = OrderStatus.fromOrderNumber(pushedOrder.getStatus().getOrderNumber() + 1);
+    pushedOrder.setStatus(newStatus);
+
+    orderCrudService.saveOrUpdate(pushedOrder);
+    return orderMapper.orderToWorkerActiveOrderDto(pushedOrder);
+  }
+
 }
