@@ -228,5 +228,26 @@ public class OrderService {
 
     orderCrudService.delete(deletingOrder);
   }
-  
+
+  @Transactional
+  public void updateOrderByAdmin(String userEmail, Long id, @Valid UpdatedOrderDto updatedOrderDto) {
+    var admin = restaurantAdminCrudService.getByEmail(userEmail);
+    var activeOrders = orderCrudService.findByRestaurantAndStatusIn(admin.getRestaurant());
+    
+    var updatingOrder = activeOrders.stream()
+        .filter(order -> order.getId().equals(id))
+        .findAny()
+        .orElseThrow(() -> new BusinessLogicException(
+            "В данном ресторане нет активного заказа с id = %s".formatted(id)));
+
+    if (updatingOrder.getStatus().getOrderNumber() > 2) {
+      throw new BusinessLogicException("Заказ уже приготовлен, его нельзя обновить");
+    }
+
+    updatingOrder.clearItems();
+
+    updatingOrder = setOrderContentFromDto(updatingOrder, updatedOrderDto.getMenuItems());
+    orderCrudService.saveOrUpdate(updatingOrder);
+    
+  }
 }
