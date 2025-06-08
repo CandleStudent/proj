@@ -115,14 +115,14 @@ export default {
           <p class="font-semibold text-gray-700 mb-2 text-center">Изменить статус:</p>
           <div class="flex justify-center space-x-4">
             <button
-                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow w-1/2"
                 @click="setCourierStatus('READY')"
                 :disabled="courierInfo.status === 'READY'"
             >
               Свободен
             </button>
             <button
-                class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow"
+                class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow w-1/2"
                 @click="setCourierStatus('BUSY')"
                 :disabled="courierInfo.status === 'BUSY'"
             >
@@ -150,13 +150,13 @@ export default {
 
         <div class="flex justify-between mt-4">
           <button
-              class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-3 py-1 rounded"
+              class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-3 py-1 rounded w-1/2"
               @click="showOrderDetails(order)">
             Посмотреть детали
           </button>
 
           <button
-              class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
+              class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded w-1/2"
               @click="nextStatus(order)">
             Доставлено
           </button>
