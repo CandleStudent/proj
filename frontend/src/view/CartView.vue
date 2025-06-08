@@ -17,9 +17,10 @@
         <!-- Список адресов -->
         <AddressList
             :addresses="addresses"
-            v-model:selectedAddressId="selectedAddressId"
-            @add-address-click="showAddAddressModal = true"
-        />
+            v-model="selectedAddressId"
+            @add-address="handleAddressAdded"
+            @edit-address="editAddress"
+            @address-deleted="fetchAddresses"/>
 
         <!-- Нижняя панель с оплатой и итогом -->
         <div
@@ -69,25 +70,17 @@
       </div>
     </div>
 
-    <!-- Модальное окно добавления адреса -->
-    <AddAddressModal
-        :show="showAddAddressModal"
-        @close="showAddAddressModal = false"
-        @address-added="handleAddressAdded"
-    />
   </div>
 </template>
 
 <script>
 import Header from "@/components/Header.vue";
-import AddAddressModal from '@/components/addresses/AddAddressModal.vue';
 import CartList from "@/components/cart/CartList.vue";
 import AddressList from "@/components/addresses/AddressList.vue";
 
 export default {
   components: {
     Header,
-    AddAddressModal,
     CartList,
     AddressList
   },
@@ -97,7 +90,6 @@ export default {
       paymentMethod: 'CASH',
       addresses: [],
       selectedAddressId: null,
-      showAddAddressModal: false,
     };
   },
   computed: {
