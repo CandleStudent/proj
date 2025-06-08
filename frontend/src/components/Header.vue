@@ -5,6 +5,7 @@ const router = useRouter()
 
 function logout() {
   localStorage.removeItem('jwt_token')
+  localStorage.removeItem('user_role')
   router.push('/auth')
 }
 </script>

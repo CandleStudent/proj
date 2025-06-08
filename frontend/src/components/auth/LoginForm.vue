@@ -52,6 +52,7 @@ const handleLogin = async () => {
       password: password.value
     })
     localStorage.setItem('jwt_token', data.token)
+    localStorage.setItem('user_role', data.userRole)
 
     switch (data.userRole) {
       case 'ROLE_CUSTOMER':
