@@ -38,7 +38,6 @@ public class Courier {
   private User user;
 
   @ManyToOne(optional=false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @PrimaryKeyJoinColumn(referencedColumnName = "id")
   private Restaurant restaurant;
 
   @Column(name = "row_insert_time", nullable = false, updatable = false)
