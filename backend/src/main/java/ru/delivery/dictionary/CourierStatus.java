@@ -8,8 +8,8 @@ public enum CourierStatus {
   READY, IN_DELIVERY, BUSY, INACTIVE;
 
   @JsonCreator
-  public OrderStatus fromValue(String text) {
-    return Enum.valueOf(OrderStatus.class, text);
+  public CourierStatus fromValue(String text) {
+    return Enum.valueOf(CourierStatus.class, text);
   }
 
   @JsonValue

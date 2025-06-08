@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.delivery.dto.CourierInfoDto;
 import ru.delivery.dto.WorkerActiveOrderDto;
 import ru.delivery.service.CourierService;
 import ru.delivery.service.OrderService;
@@ -36,11 +37,18 @@ public class CourierController {
     return pushedOrder;
   }
 
-  @PutMapping("/ready")
-  public void setReadyForDeliveryStatus(Principal principal) {
+  @PutMapping("/status/{status}")
+  public void setReadyForDeliveryStatus(Principal principal, @PathVariable String status) {
     var userEmail = principal.getName();
 
-    courierService.setReadyForDeliveryStatus(userEmail);
+    courierService.setCourierStatus(userEmail, status);
+  }
+
+  @GetMapping("/info")
+  public CourierInfoDto getCourierInfo(Principal principal) {
+    var userEmail = principal.getName();
+
+    return courierService.getCourierInfo(userEmail);
   }
 
 }
