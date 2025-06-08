@@ -15,7 +15,7 @@ import ru.delivery.entity.Order;
     uses = {OrderItemMapper.class, AddressMapper.class})
 public interface OrderMapper {
 
-  @Mapping(source = "customerAddress", target = "customerAddress")
+  @Mapping(source = "customerAddress", target = "address")
   @Mapping(source = "status", target = "status", qualifiedByName = "orderStatusToString")
   @Mapping(source = "paymentType", target = "paymentType", qualifiedByName = "enumToString")
   @Mapping(source = "items", target = "menuItems")

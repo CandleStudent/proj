@@ -23,6 +23,18 @@ export default {
     order: {
       type: Object,
       required: true
+    },
+    cancelEndpointPrefix: {
+      type: String,
+      default: '/api/order/cancel'
+    },
+    updateEndpointPrefix: {
+      type: String,
+      default: '/api/order/update'
+    },
+    isAdminMode: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['close', 'cancelled'],
@@ -48,10 +60,12 @@ export default {
           : this.order.cost
     },
     canBeCancelled() {
+      if (this.isAdminMode) return true
       const cancellableStatuses = ['Приняли в работу', 'Готовим', 'Собираем']
       return cancellableStatuses.includes(this.order.status)
     },
     canBeEdited() {
+      if (this.isAdminMode) return true
       const editableStatuses = ['Приняли в работу']
       return editableStatuses.includes(this.order.status)
     }
@@ -60,7 +74,7 @@ export default {
     async cancelOrder() {
       try {
         const token = localStorage.getItem('jwt_token')
-        await axios.delete(`${host}/api/order/cancel/${this.order.id}`, {
+        await axios.delete(`${host}${this.cancelEndpointPrefix}/${this.order.id}`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         alert('Заказ отменён')
@@ -90,7 +104,7 @@ export default {
           }))
         }
 
-        await axios.put(`${host}/api/order/update/${this.order.id}`, payload, {
+        await axios.put(`${host}${this.updateEndpointPrefix}/${this.order.id}`, payload, {
           headers: { Authorization: `Bearer ${token}` }
         })
 
@@ -144,9 +158,12 @@ export default {
 
         <p><strong>Статус:</strong> {{ order.status }}</p>
         <p><strong>Адрес клиента:</strong> {{ order.customerFormattedAddress }}</p>
-        <p><strong>Адрес ресторана:</strong> {{ order.restaurantFormattedAddress }}</p>
+        <p v-if="order.clientName"><strong>Имя клиента:</strong> {{ order.clientName }}</p>
+        <p v-if="order.clientPhone"><strong>Телефон клиента:</strong> {{ order.clientPhone }}</p>
+        <p v-if="order.restaurantFormattedAddress"><strong>Адрес ресторана:</strong> {{ order.restaurantFormattedAddress }}</p>
         <p><strong>Оплата:</strong> {{ order.paymentType }}</p>
         <p><strong>Сумма:</strong> {{ calculatedTotalCost }} ₽</p>
+        <p><strong>Комментарий:</strong> {{ order.address.comment }}</p>
 
         <div class="mt-4">
           <CartList

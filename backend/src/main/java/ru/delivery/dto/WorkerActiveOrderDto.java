@@ -17,7 +17,7 @@ public class WorkerActiveOrderDto {
   @NotNull
   private Long id;
   @NotNull
-  private AddressDto customerAddress;
+  private AddressDto address;
   @NotBlank
   private String paymentType;
   @NotNull
