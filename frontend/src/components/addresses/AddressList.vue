@@ -1,12 +1,9 @@
-<!-- components/cart/AddressList.vue -->
 <template>
-  <div>
+  <div class="p-6 border-t">
     <h3 class="text-xl font-semibold mb-3">Выберите адрес доставки</h3>
-
     <div v-if="addresses.length === 0" class="text-gray-500 mb-4">
       Нет адресов. Добавьте новый адрес.
     </div>
-
     <div v-else class="space-y-2 mb-4">
       <label
           v-for="addr in addresses"
@@ -17,7 +14,7 @@
             type="radio"
             name="address"
             :value="addr.id"
-            v-model="localSelectedId"
+            v-model="selectedId"
             class="form-radio"
         />
         <div>
@@ -33,9 +30,8 @@
         </div>
       </label>
     </div>
-
     <button
-        @click="$emit('add-address')"
+        @click="$emit('add-address-click')"
         class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded"
     >
       Добавить адрес
@@ -45,25 +41,25 @@
 
 <script>
 export default {
-  name: 'AddressList',
+  name: 'AddressSelector',
   props: {
     addresses: {
       type: Array,
       required: true,
     },
-    modelValue: {
-      type: [String, Number, null],
+    selectedAddressId: {
+      type: [Number, String],
       default: null,
     },
   },
-  emits: ['update:modelValue', 'add-address'],
+  emits: ['update:selectedAddressId', 'add-address-click'],
   computed: {
-    localSelectedId: {
+    selectedId: {
       get() {
-        return this.modelValue;
+        return this.selectedAddressId;
       },
       set(value) {
-        this.$emit('update:modelValue', value);
+        this.$emit('update:selectedAddressId', value);
       },
     },
   },
