@@ -50,6 +50,7 @@ public class Customer {
 
   @OneToMany(
       mappedBy = "customer",
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
       fetch = FetchType.LAZY
   )
   private List<Address> addresses = new ArrayList<>();
