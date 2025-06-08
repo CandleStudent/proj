@@ -33,9 +33,6 @@
           </div>
         </label>
         <div class="flex items-center space-x-2 ml-2">
-          <button @click="$emit('edit-address', addr)" class="text-blue-500 hover:text-blue-700">
-            ✏️
-          </button>
           <button @click="deleteAddress(addr.id)" class="text-red-500 hover:text-red-700">
             🗑️
           </button>
@@ -75,7 +72,7 @@ export default {
       default: null,
     },
   },
-  emits: ['update:modelValue', 'add-address', 'edit-address', 'address-deleted'],
+  emits: ['update:modelValue', 'add-address', 'address-deleted'],
   computed: {
     localSelectedId: {
       get() {

@@ -28,6 +28,7 @@ public class AddressService {
   private final YandexSuggestService yandexSuggestService;
   private final YandexGeocoderService yandexGeocoderService;
 
+  //todo выпилить редактирование заказа, т.к. это нарушит логику привязки старых заказов к этому адресу
   @Transactional
   public void addOrUpdateAddress(String userEmail, @Valid AddressDto addressDto) {
     //todo split this method on more specific and SOLID
