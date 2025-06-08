@@ -3,7 +3,6 @@ import ProfileForm from '@/view/ProfileView.vue'
 import MenuForm from '@/view/MenuView.vue'
 import CartForm from '@/view/CartView.vue'
 import AuthForm from '@/view/AuthView.vue'
-import TestView from '@/view/TestView.vue';
 import AdminView from "@/view/AdminView.vue";
 import CourierView from "@/view/CourierView.vue";
 
@@ -13,7 +12,6 @@ const routes = [
   { path: '/menu', component: MenuForm },
   { path: '/cart', component: CartForm },
   { path: '/', redirect: '/auth' },
-  { path: '/test', component: TestView },
   { path: '/admin', component: AdminView },
   { path: '/courier', component: CourierView },
 ]
