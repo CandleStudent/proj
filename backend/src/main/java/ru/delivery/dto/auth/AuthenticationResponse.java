@@ -1,10 +1,11 @@
 package ru.delivery.dto.auth;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
-@AllArgsConstructor
+@Accessors(chain = true)
 public class AuthenticationResponse {
   private String token;
+  private String userRole;
 }

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.delivery.dictionary.CourierStatus;
 import ru.delivery.dictionary.Role;
 import ru.delivery.dictionary.UserStatus;
+import ru.delivery.dto.auth.AuthenticationResponse;
 import ru.delivery.dto.auth.WorkerRegisterRequest;
 import ru.delivery.entity.Courier;
 import ru.delivery.entity.Customer;
@@ -37,7 +38,7 @@ public class UserService {
   private final AuthenticationManager authManager;
 
   @Transactional
-  public String register(String email, String password) {
+  public AuthenticationResponse register(String email, String password) {
     if (userCrudService.isUserExists(email)) {
       throw new RuntimeException("Пользователь уже существует");
     }
@@ -54,11 +55,13 @@ public class UserService {
 
     String jwt = jwtService.generateToken(user);
 
-    return jwt;
+    return new AuthenticationResponse()
+        .setToken(jwt)
+        .setUserRole(user.getRole().toValue());
   }
 
   @Transactional
-  public String registerWorker(WorkerRegisterRequest request) {
+  public AuthenticationResponse registerWorker(WorkerRegisterRequest request) {
     if (userCrudService.isUserExists(request.getEmail())) {
       throw new RuntimeException("Пользователь уже существует");
     }
@@ -72,7 +75,9 @@ public class UserService {
 
     createWorker(request,user);
 
-    return jwtService.generateToken(user);
+    return new AuthenticationResponse()
+        .setToken(jwtService.generateToken(user))
+        .setUserRole(user.getRole().toValue());
   }
 
   private void createWorker(WorkerRegisterRequest request, User user) {
@@ -95,7 +100,7 @@ public class UserService {
     }
   }
 
-  public String login(String email, String password) {
+  public AuthenticationResponse login(String email, String password) {
 
     authManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
@@ -106,7 +111,9 @@ public class UserService {
       throw new RuntimeException("Введен неправильный пароль");
     }
 
-    return jwtService.generateToken(user);
+    return new AuthenticationResponse()
+        .setToken(jwtService.generateToken(user))
+        .setUserRole(user.getRole().toValue());
   }
 
 }

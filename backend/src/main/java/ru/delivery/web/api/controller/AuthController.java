@@ -2,7 +2,6 @@ package ru.delivery.web.api.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,27 +22,23 @@ public class AuthController {
 
   @PostMapping("/register")
   public AuthenticationResponse register(@RequestBody @Valid RegisterRequest request) {
-    String jwt = userService.register(request.getEmail(), request.getPassword());
-    return new AuthenticationResponse(jwt);
+    return userService.register(request.getEmail(), request.getPassword());
   }
 
   @PostMapping("/worker/register")
   @PreAuthorize("hasRole('MASTER')")
-  public AuthenticationResponse registerRestaurantAdmin(
+  public AuthenticationResponse registerRestaurantWorker(
       @RequestBody @Valid WorkerRegisterRequest request) {
 
-    String jwt = userService.registerWorker(request);
-    return new AuthenticationResponse(jwt);
+    return userService.registerWorker(request);
   }
 
   @PostMapping("/login")
-  public ResponseEntity<?> login(@RequestBody @Valid AuthenticationRequest request) {
+  public AuthenticationResponse login(@RequestBody @Valid AuthenticationRequest request) {
     String email = request.getEmail();
     String password = request.getPassword();
 
-    var jwt = userService.login(email, password);
-
-    return ResponseEntity.ok(new AuthenticationResponse(jwt));
+    return userService.login(email, password);
   }
 
 }
