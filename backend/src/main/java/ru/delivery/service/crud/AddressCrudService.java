@@ -19,4 +19,8 @@ public class AddressCrudService {
         .orElseThrow(() -> new EntityNotFoundException(
             "Адреса с id = %s не существует".formatted(id)));
   }
+
+  public Address saveOrUpdate(Address address) {
+    return addressRepository.save(address);
+  }
 }

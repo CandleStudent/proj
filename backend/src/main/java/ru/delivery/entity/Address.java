@@ -60,10 +60,10 @@ public class Address {
   @Column(name = "comment", length = 255)
   private String comment;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, optional = true)
   @JoinColumn(
       name = "customer_id",
-      nullable = false,
+      nullable = true,
       foreignKey = @ForeignKey(name = "address_fk0"))
   private Customer customer;
 

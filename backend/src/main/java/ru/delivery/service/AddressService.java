@@ -11,6 +11,7 @@ import ru.delivery.dto.AddressDto;
 import ru.delivery.entity.Address;
 import ru.delivery.exception.BusinessLogicException;
 import ru.delivery.mapper.AddressMapper;
+import ru.delivery.service.crud.AddressCrudService;
 import ru.delivery.service.crud.CustomerCrudService;
 import ru.delivery.web.client.dto.YandexSuggestResponse;
 import ru.delivery.web.client.service.YandexGeocoderService;
@@ -22,6 +23,7 @@ import ru.delivery.web.client.service.YandexSuggestService;
 public class AddressService {
 
   private final CustomerCrudService customerCrudService;
+  private final AddressCrudService addressCrudService;
   private final AddressMapper addressMapper;
   private final YandexSuggestService yandexSuggestService;
   private final YandexGeocoderService yandexGeocoderService;
@@ -100,8 +102,12 @@ public class AddressService {
         .filter(address -> address.getId().equals(id))
         .findAny()
         .orElseThrow(() -> new BusinessLogicException("Вы пытаетесь удалить не свой адрес"));
-    customer.getAddresses().remove(deletingAddress);
+    deletingAddress.setCustomer(null);
 
+    // мы не удаляем адрес из БД, т.к. на него завязаны заказы. Мы только убираем у него привязку
+    // к данному клиенту
+    customer.removeAddress(deletingAddress);
     customerCrudService.saveOrUpdate(customer);
+    addressCrudService.saveOrUpdate(deletingAddress);
   }
 }
