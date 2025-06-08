@@ -22,6 +22,8 @@ public interface OrderMapper {
   @Mapping(source = "customer.user.email", target = "clientEmail")
   @Mapping(source = "customer.name", target = "clientName")
   @Mapping(source = "customer.phone", target = "clientPhone")
+  @Mapping(source = "courier.name", target = "courierName")
+  @Mapping(source = "courier.phone", target = "courierPhone")
   WorkerActiveOrderDto orderToWorkerActiveOrderDto(Order order);
 
   List<WorkerActiveOrderDto> ordersToWorkerActiveOrderDtos(List<Order> orders);

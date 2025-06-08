@@ -164,6 +164,8 @@ export default {
         <p><strong>Оплата:</strong> {{ order.paymentType }}</p>
         <p><strong>Сумма:</strong> {{ calculatedTotalCost }} ₽</p>
         <p><strong>Комментарий:</strong> {{ order.address.comment }}</p>
+        <p v-if="order.courierName"><strong>Имя курьера:</strong> {{ order.courierName }}</p>
+        <p v-if="order.courierPhone"><strong>Телефон курьера:</strong> {{ order.courierPhone }}</p>
 
         <div class="mt-4">
           <CartList

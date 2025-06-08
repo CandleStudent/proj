@@ -34,4 +34,9 @@ public class WorkerActiveOrderDto {
   @Pattern(regexp = "\\+?[1234567890]+")
   private String clientPhone;
 
+  private String courierName;
+  @Size(min = 11, max = 12)
+  @Pattern(regexp = "\\+?[1234567890]+")
+  private String courierPhone;
+
 }
