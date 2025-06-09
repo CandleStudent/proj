@@ -84,7 +84,7 @@ export default {
 <template>
   <WorkerHeader />
   <div class="p-4 bg-[#f3fdf5]">
-    <h1 class="text-2xl font-bold mb-6 text-green-700">Управление заказами ресторана</h1>
+    <h1 class="text-2xl font-bold mb-6 text-green-700 text-center">Управление заказами ресторана</h1>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 p-6">
 
       <div v-for="(orders, status) in ordersByStatus" :key="status" class="mb-8">
