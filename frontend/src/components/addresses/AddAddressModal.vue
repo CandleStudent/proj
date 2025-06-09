@@ -85,6 +85,7 @@ export default {
       searchQuery: '',
       suggestions: [],
       loadingSuggestions: false,
+      skipNextSuggestWhenOneChosen: false,
       address: {
         city: '',
         street: '',
@@ -98,6 +99,10 @@ export default {
   },
   watch: {
     searchQuery(newVal) {
+      if (this.skipNextSuggestWhenOneChosen) {
+        this.skipNextSuggestWhenOneChosen = false;
+        return;
+      }
       clearTimeout(debounceTimer);
       if (!newVal.trim()) {
         this.suggestions = [];
@@ -124,6 +129,7 @@ export default {
       }
     },
     selectSuggestion(suggestion) {
+      this.skipNextSuggestWhenOneChosen = true
       this.searchQuery = suggestion.title.text;
       this.suggestions = [];
 
