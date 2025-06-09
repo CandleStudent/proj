@@ -2,6 +2,7 @@
 import axios from 'axios'
 import OrderDetails from '@/components/profile/OrderDetails.vue'
 import WorkerHeader from "@/components/WorkerHeader.vue";
+import {formatDateTime} from "../utils/formatDate.js";
 
 const API_HOST = 'http://localhost:8080'
 const ORDERS_ENDPOINT = '/api/courier/order'
@@ -19,6 +20,7 @@ export default {
     }
   },
   methods: {
+    formatDateTime,
     async setCourierStatus(status) {
       try {
         const token = localStorage.getItem('jwt_token')
@@ -147,6 +149,7 @@ export default {
         <p><strong>Адрес:</strong> {{ order.address.city }}, {{ order.address.street }} {{ order.address.building }}</p>
         <p><strong>Оплата:</strong> {{ order.paymentType }}</p>
         <p><strong>Email клиента:</strong> {{ order.clientEmail }}</p>
+        <p><strong>Создан:</strong> {{ formatDateTime(order.orderCreatedAt) }}</p>
 
         <div class="flex justify-between mt-4">
           <button

@@ -1,6 +1,8 @@
 <script>
 import axios from 'axios'
 import OrderDetails from "@/components/profile/OrderDetails.vue";
+import { formatDateTime } from '@/utils/formatDate.js'
+
 
 const API_HOST = 'http://localhost:8080'
 const ORDERS_ENDPOINT = '/api/order/active'
@@ -23,9 +25,10 @@ export default {
   computed: {
     currentOrder() {
       return this.orders[this.orderIndex]
-    }
+    },
   },
   methods: {
+    formatDateTime,
     async updateActiveOrders() {
       await this.fetchOrders()
       this.orderIndex = 0
@@ -80,6 +83,7 @@ export default {
         <p><strong>Статус:</strong> {{ currentOrder.status }}</p>
         <p><strong>Адрес доставки:</strong> {{ currentOrder.customerFormattedAddress }}</p>
         <p><strong>Адрес ресторана:</strong> {{ currentOrder.restaurantFormattedAddress }}</p>
+        <p><strong>Создан:</strong> {{ formatDateTime(currentOrder.orderCreatedAt) }}</p>
       </div>
 
       <div class="flex justify-between">
