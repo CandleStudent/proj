@@ -3,13 +3,13 @@ package ru.delivery.web.api.controller;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.delivery.dto.CurrentProfileDataDto;
+import ru.delivery.dto.NewPasswordDto;
 import ru.delivery.dto.NewProfileDataDto;
 import ru.delivery.service.ProfileService;
 
@@ -28,19 +28,21 @@ public class ProfileController {
     return currentProfileDataDto;
   }
 
-  @PostMapping()
-  public ResponseEntity<?> postProfileData(
+  @PutMapping
+  public void putProfileData(
       Principal principal,
       @Valid @RequestBody NewProfileDataDto profileData) {
 
     var userEmail = principal.getName();
+    profileService.updateProfileData(userEmail, profileData);
+  }
 
-    try {
-      profileService.updateProfileData(userEmail, profileData);
-      return ResponseEntity.ok().build();
-    } catch (RuntimeException e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
-    }
+  @PutMapping("/password")
+  public void putPassword(
+      Principal principal, @Valid @RequestBody NewPasswordDto newPasswordDto) {
+
+    var userEmail = principal.getName();
+    profileService.updatePassword(userEmail, newPasswordDto);
   }
 
 }

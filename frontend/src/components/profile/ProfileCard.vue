@@ -15,6 +15,11 @@
           phone: '',
           email: '',
         },
+        passwordData: {
+          oldPassword: '',
+          newPassword: '',
+          newPasswordRepeated: '',
+        },
         orders: [],
         orderIndex: 0,
       }
@@ -29,11 +34,22 @@
       },
       async updateProfile() {
         const token = localStorage.getItem('jwt_token')
-        await axios.post(`${API_HOST}${PROFILE_ENDPOINT}`, this.form, {
+        await axios.put(`${API_HOST}${PROFILE_ENDPOINT}`, this.form, {
           headers: { Authorization: `Bearer ${token}` }
         })
         alert('Данные профиля обновлены')
-      }
+      },
+      async updatePassword() {
+        const token = localStorage.getItem('jwt_token')
+        try {
+          await axios.put(`${API_HOST}${PROFILE_ENDPOINT}/password`, this.passwordData, {
+            headers: {Authorization: `Bearer ${token}`}
+          })
+          alert('Пароль обновлен')
+        } catch (err) {
+          alert(err.response.data ? err.response.data : err)
+        }
+      },
     },
     mounted() {
       this.fetchProfile()
@@ -67,6 +83,27 @@
 
     <button @click="updateProfile" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded transition">
       Обновить данные профиля
+    </button>
+
+    <h2 class="text-xl font-semibold text-green-700 mb-2">Изменить пароль</h2>
+
+    <div>
+      <label class="block text-sm mb-1 text-gray-600">Старый пароль</label>
+      <input type="password" v-model="passwordData.oldPassword" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Введите старый пароль" />
+    </div>
+
+    <div>
+      <label class="block text-sm mb-1 text-gray-600">Новый пароль</label>
+      <input type="password" v-model="passwordData.newPassword" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Введите новый пароль" />
+    </div>
+
+    <div>
+      <label class="block text-sm mb-1 text-gray-600">Повторите новый пароль</label>
+      <input type="password" v-model="passwordData.newPasswordRepeated" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Введите новый пароль снова" />
+    </div>
+
+    <button @click="updatePassword" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded transition">
+      Обновить пароль
     </button>
   </div>
 </template>
