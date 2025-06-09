@@ -36,14 +36,18 @@ public class ProfileService {
   }
 
   @Transactional
-  public void updateProfileData(String userEmail, @Valid NewProfileDataDto profileData) {
+  public String updateProfileData(String userEmail, @Valid NewProfileDataDto profileData) {
     var customer = customerCrudService.getByEmail(userEmail);
     customer
         .setName(profileData.getName())
         .setSurname(profileData.getSurname())
         .setPhone(profileData.getPhone());
+    if (!profileData.getEmail().equals(customer.getUser().getEmail())) {
+      customer.getUser().setEmail(profileData.getEmail());
+    }
 
     customerCrudService.saveOrUpdate(customer);
+    return jwtService.generateToken(customer.getUser());
   }
 
   @Transactional

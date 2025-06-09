@@ -5,6 +5,8 @@
   const API_HOST = 'http://localhost:8080'
   const PROFILE_ENDPOINT = '/api/profile'
 
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
   export default {
     components: {Header},
     data() {
@@ -33,10 +35,19 @@
         this.form = res.data
       },
       async updateProfile() {
+        // Проверка email перед отправкой
+        this.emailError = !isValidEmail(this.form.email)
+        if (this.emailError) {
+          alert("Введенный email некорректен")
+          await this.fetchProfile()
+          return
+        }
+
         const token = localStorage.getItem('jwt_token')
-        await axios.put(`${API_HOST}${PROFILE_ENDPOINT}`, this.form, {
+        const newJwtRes = await axios.put(`${API_HOST}${PROFILE_ENDPOINT}`, this.form, {
           headers: { Authorization: `Bearer ${token}` }
         })
+        localStorage.setItem('jwt_token', newJwtRes.data)
         alert('Данные профиля обновлены')
       },
       async updatePassword() {
@@ -78,7 +89,18 @@
 
     <div>
       <label class="block text-sm mb-1 text-gray-600">Электронная почта</label>
-      <input :value="form.email" class="input bg-gray-100 cursor-not-allowed w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" disabled />
+<!--      <input :value="form.email" class="input bg-gray-100 w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" />-->
+      <input
+          type="email"
+          id="email"
+          v-model="form.email"
+          placeholder="example@domain.com"
+          :class="[
+          'w-full px-4 py-3 text-base border rounded-md focus:outline-none focus:ring-2 transition-colors duration-300',
+          emailError ? 'border-red-400 focus:ring-red-400' : 'focus:ring-green-500'
+        ]"
+      />
+      <p v-if="emailError" class="mt-1 text-sm text-red-500">Введите корректный email</p>
     </div>
 
     <button @click="updateProfile" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded transition">

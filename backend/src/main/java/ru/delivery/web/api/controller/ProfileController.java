@@ -29,12 +29,12 @@ public class ProfileController {
   }
 
   @PutMapping
-  public void putProfileData(
+  public String putProfileData(
       Principal principal,
       @Valid @RequestBody NewProfileDataDto profileData) {
 
     var userEmail = principal.getName();
-    profileService.updateProfileData(userEmail, profileData);
+    return profileService.updateProfileData(userEmail, profileData);
   }
 
   @PutMapping("/password")
