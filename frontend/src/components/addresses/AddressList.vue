@@ -93,8 +93,8 @@ export default {
       if (!confirm('Удалить адрес?')) return;
       try {
         const token = localStorage.getItem('jwt_token');
-        const response = await fetch(`http://localhost:8080/api/address/${id}`, {
-          method: 'DELETE',
+        const response = await fetch(`http://localhost:8080/api/address/detach/${id}`, {
+          method: 'PUT',
           headers: {
             Authorization: `Bearer ${token}`,
           },

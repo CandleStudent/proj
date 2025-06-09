@@ -4,10 +4,10 @@ import jakarta.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,10 +40,10 @@ public class AddressController {
     addressService.addOrUpdateAddress(userEmail, addressDto);
   }
 
-  @DeleteMapping("/{id}")
-  public void deleteAddress(Principal principal, @PathVariable Long id) {
+  @PutMapping("/detach/{id}")
+  public void detachAddressFromCustomer(Principal principal, @PathVariable Long id) {
     var userEmail = principal.getName();
-    addressService.deleteAddress(userEmail, id);
+    addressService.detachAddressFromCustomer(userEmail, id);
   }
 
 }

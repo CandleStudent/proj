@@ -97,7 +97,7 @@ public class AddressService {
   }
 
   @Transactional
-  public void deleteAddress(String userEmail, Long id) {
+  public void detachAddressFromCustomer(String userEmail, Long id) {
     var customer = customerCrudService.getByEmailWithAddresses(userEmail);
     var deletingAddress = customer.getAddresses().stream()
         .filter(address -> address.getId().equals(id))
