@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.delivery.dto.AddressDto;
-import ru.delivery.entity.Address;
 import ru.delivery.exception.BusinessLogicException;
 import ru.delivery.mapper.AddressMapper;
 import ru.delivery.service.crud.AddressCrudService;
@@ -28,42 +27,22 @@ public class AddressService {
   private final YandexSuggestService yandexSuggestService;
   private final YandexGeocoderService yandexGeocoderService;
 
-  //todo выпилить редактирование заказа, т.к. это нарушит логику привязки старых заказов к этому адресу
   @Transactional
-  public void addOrUpdateAddress(String userEmail, @Valid AddressDto addressDto) {
+  public void addAddress(String userEmail, @Valid AddressDto addressDto) {
     //todo split this method on more specific and SOLID
     addressDto = validateAddressWithGeoSuggester(addressDto);
     var posOfAddress = yandexGeocoderService
         .getLonLatByAddress(addressDto.getFormattedAddress())
         .block();
     var point = Optional.ofNullable(posOfAddress.getPosition())
-        .orElseThrow(() -> new BusinessLogicException("По данному адресу нет географических точек"));
+        .orElseThrow(
+            () -> new BusinessLogicException("По данному адресу нет географических точек"));
     addressDto.setLon(point.getLon());
     addressDto.setLat(point.getLat());
     var customer = customerCrudService.getByEmailWithAddresses(userEmail);
-    if (addressDto.getId() == null) {
-      customer.addAddress(addressMapper.addressDtoToAddress(addressDto, customer));
-    } else {
-      final var addressId = addressDto.getId();
-      var changingAddress = customer.getAddresses().stream()
-          .filter(address -> address.getId().equals(addressId)).findAny().orElseThrow(
-              () -> new BusinessLogicException("Среди адресов клиента нет с указанным айди = %s"
-                  .formatted(addressId)));
-      copyFromAddressDtoToAddress(addressDto, changingAddress);
-    }
-    customerCrudService.saveOrUpdate(customer);
-  }
 
-  private void copyFromAddressDtoToAddress(AddressDto addressDto, Address address) {
-    address.setCity(addressDto.getCity());
-    address.setStreet(addressDto.getStreet());
-    address.setBuilding(addressDto.getBuilding());
-    address.setEntrance(addressDto.getEntrance());
-    address.setFloor(addressDto.getFloor());
-    address.setApartments(addressDto.getApartments());
-    address.setComment(addressDto.getComment());
-    address.setLat(addressDto.getLat());
-    address.setLon(addressDto.getLon());
+    customer.addAddress(addressMapper.addressDtoToAddress(addressDto, customer));
+    customerCrudService.saveOrUpdate(customer);
   }
 
   /**

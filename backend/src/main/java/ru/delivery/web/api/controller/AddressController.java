@@ -37,7 +37,7 @@ public class AddressController {
 
     var userEmail = principal.getName();
 
-    addressService.addOrUpdateAddress(userEmail, addressDto);
+    addressService.addAddress(userEmail, addressDto);
   }
 
   @PutMapping("/detach/{id}")
