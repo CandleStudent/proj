@@ -35,15 +35,15 @@
             <!-- Основные поля -->
             <div>
               <label class="block font-medium mb-1" for="city">Город *</label>
-              <input readonly id="city" v-model="address.city" type="text" required maxlength="50" class="w-full border rounded px-3 py-2 cursor-not-allowed" />
+              <input readonly id="city" v-model="address.city" type="text" required maxlength="50" class="w-full border rounded px-3 py-2 cursor-not-allowed" placeholder="Начните вводить адрес в поиске" />
             </div>
             <div>
               <label class="block font-medium mb-1" for="street">Улица *</label>
-              <input readonly id="street" v-model="address.street" type="text" required maxlength="50" class="w-full border rounded px-3 py-2 cursor-not-allowed" />
+              <input readonly id="street" v-model="address.street" type="text" required maxlength="50" class="w-full border rounded px-3 py-2 cursor-not-allowed" placeholder="Начните вводить адрес в поиске"/>
             </div>
             <div>
               <label class="block font-medium mb-1" for="building">Строение / Дом *</label>
-              <input readonly id="building" v-model="address.building" type="text" required maxlength="50" class="w-full border rounded px-3 py-2 cursor-not-allowed" />
+              <input readonly id="building" v-model="address.building" type="text" required maxlength="50" class="w-full border rounded px-3 py-2 cursor-not-allowed" placeholder="Начните вводить адрес в поиске"/>
             </div>
             <div>
               <label class="block font-medium mb-1" for="entrance">Подъезд</label>
