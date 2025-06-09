@@ -1,5 +1,7 @@
 package ru.delivery.service.crud;
 
+import static ru.delivery.constants.YummyConstant.OrderConstant.ACTIVE_STATUSES;
+
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,8 +28,8 @@ public class CustomerCrudService {
             USER_WITH_EMAIL_NOT_FOUND_MSG.formatted(email)));
   }
 
-  public Customer getByEmailWithOrders(String email) {
-    return customerRepository.findByEmailWithOrders(email)
+  public Customer getByEmailWithActiveOrders(String email) {
+    return customerRepository.findByEmailWithActiveOrders(email, ACTIVE_STATUSES)
         .orElseThrow(() -> new EntityNotFoundException(
             USER_WITH_EMAIL_NOT_FOUND_MSG.formatted(email)));
   }

@@ -27,7 +27,7 @@ import ru.delivery.dictionary.OrderStatus;
 import ru.delivery.dictionary.PaymentType;
 
 @Entity
-@Table(name = "`order`") // Backticks needed because "order" is a SQL keyword
+@Table(name = "`order`")
 @Data
 @Accessors(chain = true)
 public class Order {
@@ -40,6 +40,9 @@ public class Order {
 
   @Column(name = "row_update_time", nullable = false)
   private LocalDateTime rowUpdateTime;
+
+  @Column(name = "row_insert_time", nullable = false, updatable = false)
+  private LocalDateTime rowInsertTime;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(
@@ -105,6 +108,7 @@ public class Order {
   @PrePersist
   public void prePersist() {
     rowUpdateTime = LocalDateTime.now();
+    rowInsertTime = LocalDateTime.now();
   }
 
   @PreUpdate

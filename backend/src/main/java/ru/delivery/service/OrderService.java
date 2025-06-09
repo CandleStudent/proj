@@ -120,36 +120,16 @@ public class OrderService {
   @Transactional
   public List<ActiveOrderDto> getActiveOrders(String userEmail) {
     var customer = customerCrudService.getByEmailWithAddresses(userEmail);
-
-    //todo replace with orderMapper
-    return customer.getOrders()
-        .stream()
-        .filter(order -> !order.getStatus().equals(OrderStatus.DONE))
-        .map(order -> new ActiveOrderDto()
-            .setId(order.getId())
-            .setAddress(addressMapper.addressToAddressDto(order.getCustomerAddress()))
-            .setPaymentType(order.getPaymentType().toValue())
-            .setStatus(order.getStatus().getStatusDescription())
-            .setCost(order.getCost())
-            .setRestaurantId(order.getRestaurant().getId())
-            .setRestaurantFormattedAddress(
-                order.getRestaurant().getAddress().getFormattedAddress())
-            .setCustomerFormattedAddress(order.getCustomerAddress().getFormattedAddress())
-            .setMenuItems(
-                order.getItems()
-                    .stream()
-                    .map(
-                        orderItem -> new MenuItemDto()
-                            .setAmount(orderItem.getAmount())
-                            .setId(orderItem.getMenuItem().getId()))
-                    .toList()
-            ))
-        .toList();
+    return orderMapper.ordersToActiveOrderDtos(
+        customer.getOrders()
+            .stream()
+            .filter(order -> !order.getStatus().equals(OrderStatus.DONE))
+            .toList());
   }
 
   @Transactional
   public void deleteOrder(String userEmail, Long id) {
-    var customer = customerCrudService.getByEmailWithOrders(userEmail);
+    var customer = customerCrudService.getByEmailWithActiveOrders(userEmail);
 
     var deletingOrder = customer.getOrders().stream()
         .filter(order -> order.getId().equals(id))
@@ -168,7 +148,7 @@ public class OrderService {
 
   @Transactional
   public void updateOrder(String userEmail, Long id, @Valid UpdatedOrderDto updatedOrderDto) {
-    var customer = customerCrudService.getByEmailWithOrders(userEmail);
+    var customer = customerCrudService.getByEmailWithActiveOrders(userEmail);
     var updatingOrder = customer.getOrders().stream()
         .filter(order -> order.getId().equals(id))
         .findAny()
@@ -232,10 +212,11 @@ public class OrderService {
   }
 
   @Transactional
-  public void updateOrderByAdmin(String userEmail, Long id, @Valid UpdatedOrderDto updatedOrderDto) {
+  public void updateOrderByAdmin(String userEmail, Long id,
+      @Valid UpdatedOrderDto updatedOrderDto) {
     var admin = restaurantAdminCrudService.getByEmail(userEmail);
     var activeOrders = orderCrudService.findByRestaurantAndStatusIn(admin.getRestaurant());
-    
+
     var updatingOrder = activeOrders.stream()
         .filter(order -> order.getId().equals(id))
         .findAny()
@@ -250,7 +231,7 @@ public class OrderService {
 
     updatingOrder = setOrderContentFromDto(updatingOrder, updatedOrderDto.getMenuItems());
     orderCrudService.saveOrUpdate(updatingOrder);
-    
+
   }
 
   @Transactional
