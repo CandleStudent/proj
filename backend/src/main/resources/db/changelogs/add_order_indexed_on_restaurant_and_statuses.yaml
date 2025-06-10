@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_order_indexed_on_restaurant_and_statuses
+      author: CandleStudent
+      changes:
+        # PostgreSQL partial index:
+        # Добавляется через raw SQL, потому что Liquibase не поддерживает partial-индексы в YAML напрямую
+        - sql:
+            splitStatements: false
+            sql: >
+              CREATE INDEX idx_order_restaurant_packed
+              ON "order" (restaurant_id, status)
+              WHERE status = 'PACKED';
+
+        - sql:
+            splitStatements: false
+            sql: >
+              CREATE INDEX idx_order_restaurant_active
+              ON "order" (restaurant_id, status)
+              WHERE status IN ('NEW', 'COOKING', 'PACKING', 'IN_DELIVERY');
+
+        - sql:
+            splitStatements: false
+            sql: >
+              CREATE INDEX idx_order_courier_delivery
+              ON "order" (courier_id, status)
+              WHERE status = 'IN_DELIVERY';
