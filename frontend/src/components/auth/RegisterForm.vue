@@ -52,7 +52,20 @@ const handleLogin = async () => {
       password: password.value
     })
     localStorage.setItem('jwt_token', data.token)
-    router.push('/menu')
+    localStorage.setItem('user_role', data.userRole)
+    switch (data.userRole) {
+      case 'ROLE_CUSTOMER':
+        await router.push('/menu')
+        break
+      case 'ROLE_COURIER':
+        await router.push('/courier')
+        break
+      case 'ROLE_RESTAURANT_ADMIN':
+        await router.push('/admin')
+        break
+      default:
+        alert('Неизвестная роль: ' + data.userRole)
+    }
   } catch (err) {
     alert(err.response.data)
     console.error(err)

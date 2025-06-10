@@ -2,7 +2,7 @@
 import axios from 'axios'
 import OrderDetails from '@/components/profile/OrderDetails.vue'
 import WorkerHeader from "@/components/WorkerHeader.vue";
-import {formatDateTime} from "../utils/formatDate.js";
+import {formatDateTime} from "../utils/utils.js";
 
 const API_HOST = 'http://localhost:8080'
 const ORDERS_ENDPOINT = '/api/admin/order'

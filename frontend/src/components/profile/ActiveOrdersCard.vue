@@ -1,7 +1,7 @@
 <script>
 import axios from 'axios'
 import OrderDetails from "@/components/profile/OrderDetails.vue";
-import { formatDateTime } from '@/utils/formatDate.js'
+import { formatDateTime } from '@/utils/utils.js'
 
 
 const API_HOST = 'http://localhost:8080'
