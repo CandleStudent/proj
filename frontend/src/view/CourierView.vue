@@ -53,7 +53,6 @@ export default {
         })
         this.orders = res.data
       } catch (e) {
-        alert('Ошибка при загрузке заказов')
       }
     },
     showOrderDetails(order) {

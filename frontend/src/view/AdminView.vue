@@ -27,7 +27,6 @@ export default {
         })
         this.organizeOrders(res.data)
       } catch (e) {
-        alert('Ошибка при загрузке заказов')
       }
     },
     organizeOrders(orders) {
