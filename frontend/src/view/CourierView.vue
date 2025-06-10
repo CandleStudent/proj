@@ -137,7 +137,11 @@ export default {
 
     <h1 class="text-2xl font-bold mb-6 text-green-700 text-center">Заказы для доставки</h1>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 p-6">
+    <div v-if="orders.length === 0" class="text-gray-500 mb-4 text-center">
+      Пока что нет назначенных заказов.
+    </div>
+
+    <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 p-6">
       <div
           v-for="order in orders"
           :key="order.id"
