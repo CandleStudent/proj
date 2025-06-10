@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.delivery.dictionary.CourierStatus;
 import ru.delivery.dictionary.OrderStatus;
 import ru.delivery.entity.Address;
+import ru.delivery.entity.Courier;
 import ru.delivery.entity.Order;
 import ru.delivery.entity.Restaurant;
 import ru.delivery.exception.BusinessLogicException;
@@ -31,6 +32,8 @@ import ru.delivery.utility.GeoUtility;
 public class DispatcherService {
 
   private final static Integer MAX_ORDERS_PER_COURIER = 5;
+  private final static Integer DEPOT_INDEX = 0;
+
   private final OrderCrudService orderCrudService;
   private final RestaurantCrudService restaurantCrudService;
   private final CourierCrudService courierCrudService;
@@ -54,13 +57,20 @@ public class DispatcherService {
       return;
     }
 
+    solveVrp(restaurant, packingOrders, freeCouriers);
+  }
+
+  private void solveVrp(
+      Restaurant restaurant,
+      List<Order> packingOrders,
+      List<Courier> freeCouriers) {
+
 // --- Подготовка точек: депо + адреса заказов ---
     // DEPOT — адрес ресторана
     Address depotAddress = restaurant.getAddress();
 
     List<Address> addresses = new ArrayList<>();
     addresses.add(depotAddress); // индекс 0 — депо
-    int DEPOT_INDEX = 0;
     packingOrders.forEach(order -> addresses.add(order.getCustomerAddress()));
 
     int numOrders = packingOrders.size();
@@ -70,35 +80,15 @@ public class DispatcherService {
     int maxOrdersCanServe = numVehicles * MAX_ORDERS_PER_COURIER;
     int ordersToAssign = Math.min(numOrders, maxOrdersCanServe);
 
-    // --- Строим матрицу расстояний ---
-    // В итоге размер матрицы = addresses.size()
-    int size = addresses.size();
-    long[][] distanceMatrix = new long[size][size];
-    for (int i = 0; i < size; i++) {
-      for (int j = 0; j < size; j++) {
-        if (i == j) {
-          distanceMatrix[i][j] = 0;
-        } else {
-          distanceMatrix[i][j] = GeoUtility.getDistanceBetweenTwoAddresses(
-              addresses.get(i), addresses.get(j))
-              .intValue();
-        }
-      }
-    }
+    long[][] distanceMatrix = initDistanceMatrix(addresses);
+    var size = addresses.size();
 
     // --- Создаем demands — нагрузки ---
     // Для депо = 0, для заказов = 1
-    long[] demands = new long[size];
-    demands[0] = 0;
-    for (int i = 1; i <= ordersToAssign; i++) {
-      demands[i] = 1;
-    }
+    long[] demands = initDemandsArray(ordersToAssign, size);
 
     // --- Задаем vehicle capacities ---
-    long[] vehicleCapacities = new long[numVehicles];
-    for (int i = 0; i < numVehicles; i++) {
-      vehicleCapacities[i] = MAX_ORDERS_PER_COURIER;
-    }
+    long[] vehicleCapacities = initVehicleCapacities(numVehicles);
 
     RoutingIndexManager manager = new RoutingIndexManager(size, numVehicles, DEPOT_INDEX);
     RoutingModel routing = new RoutingModel(manager);
@@ -145,7 +135,57 @@ public class DispatcherService {
               .formatted(restaurant.getId()));
     }
 
-    // --- Разбор решения: создаём назначения ---
+    // Остальные заказы, не вошедшие в ordersToAssign, остаются без курьера и будут назначены позже.
+    doAssignment(
+        numVehicles, routing, manager, ordersToAssign, packingOrders, freeCouriers, solution);
+  }
+
+  private long[] initVehicleCapacities(int numVehicles) {
+    long[] vehicleCapacities = new long[numVehicles];
+    for (int i = 0; i < numVehicles; i++) {
+      vehicleCapacities[i] = MAX_ORDERS_PER_COURIER;
+    }
+
+    return vehicleCapacities;
+  }
+
+  private long[] initDemandsArray(int ordersToAssign, int size) {
+    long[] demands = new long[size];
+    demands[0] = 0;
+    for (int i = 1; i <= ordersToAssign; i++) {
+      demands[i] = 1;
+    }
+
+    return demands;
+  }
+
+  private long[][] initDistanceMatrix(List<Address> addresses) {
+    int size = addresses.size();
+    long[][] distanceMatrix = new long[size][size];
+    for (int i = 0; i < size; i++) {
+      for (int j = 0; j < size; j++) {
+        if (i == j) {
+          distanceMatrix[i][j] = 0;
+        } else {
+          distanceMatrix[i][j] = GeoUtility.getDistanceBetweenTwoAddresses(
+                  addresses.get(i), addresses.get(j))
+              .intValue();
+        }
+      }
+    }
+
+    return distanceMatrix;
+  }
+
+  private void doAssignment(
+      int numVehicles,
+      RoutingModel routing,
+      RoutingIndexManager manager,
+      int ordersToAssign,
+      List<Order> packingOrders,
+      List<Courier> freeCouriers,
+      Assignment solution) {
+
     log.info("Создаем назначения");
     for (int vehicleId = 0; vehicleId < numVehicles; vehicleId++) {
       long index = routing.start(vehicleId);
