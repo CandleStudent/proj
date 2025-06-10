@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_payment_type_table
+      author: CandleStudent
+      changes:
+        - createTable:
+            tableName: payment_type
+            columns:
+              - column:
+                  name: name
+                  type: varchar(20)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: payment_type_pk
+                    nullable: false
+                    unique: true
+
+        - insert:
+            tableName: payment_type
+            columns:
+              - column:
+                  name: name
+                  value: CARD
+        - insert:
+            tableName: payment_type
+            columns:
+              - column:
+                  name: name
+                  value: CASH
+
+        - addForeignKeyConstraint:
+            baseTableName: order
+            baseColumnNames: payment_type
+            referencedTableName: payment_type
+            referencedColumnNames: name
+            constraintName: order_fk5

@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_user_status_table
+      author: CandleStudent
+      changes:
+        - createTable:
+            tableName: user_status
+            columns:
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: user_status_pk
+                    nullable: false
+                    unique: true
+
+        - insert:
+            tableName: user_status
+            columns:
+              - column:
+                  name: name
+                  value: ACTIVE
+        - insert:
+            tableName: user_status
+            columns:
+              - column:
+                  name: name
+                  value: BLOCKED
+        - insert:
+            tableName: user_status
+            columns:
+              - column:
+                  name: name
+                  value: DEACTIVATED
+
+        - addForeignKeyConstraint:
+            baseTableName: user
+            baseColumnNames: status
+            referencedTableName: user_status
+            referencedColumnNames: name
+            constraintName: user_fk2

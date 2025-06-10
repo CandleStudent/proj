@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_courier_status_table
+      author: CandleStudent
+      changes:
+        - createTable:
+            tableName: courier_status
+            columns:
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: courier_status_pk
+                    nullable: false
+                    unique: true
+
+        - insert:
+            tableName: courier_status
+            columns:
+              - column:
+                  name: name
+                  value: READY
+        - insert:
+            tableName: courier_status
+            columns:
+              - column:
+                  name: name
+                  value: IN_DELIVERY
+        - insert:
+            tableName: courier_status
+            columns:
+              - column:
+                  name: name
+                  value: BUSY
+        - insert:
+            tableName: courier_status
+            columns:
+              - column:
+                  name: name
+                  value: INACTIVE
+
+        - addForeignKeyConstraint:
+            baseTableName: courier
+            baseColumnNames: status
+            referencedTableName: courier_status
+            referencedColumnNames: name
+            constraintName: courier_fk2

@@ -46,4 +46,16 @@ databaseChangeLog:
       file: "changelogs/add_order_indexed_on_restaurant_and_statuses.yaml"
   - include:
       relativeToChangeLogFile: true
+      file: "changelogs/create_courier_status_table.yaml"
+  - include:
+      relativeToChangeLogFile: true
+      file: "changelogs/create_order_status_table.yaml"
+  - include:
+      relativeToChangeLogFile: true
+      file: "changelogs/create_payment_type_table.yaml"
+  - include:
+      relativeToChangeLogFile: true
+      file: "changelogs/create_user_status_table.yaml"
+  - include:
+      relativeToChangeLogFile: true
       file: "changelogs/init_master_user.yaml" # for testing purposes master user inserted via liquibase

@@ -1,0 +1,54 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_order_status_table
+      author: CandleStudent
+      changes:
+        - createTable:
+            tableName: order_status
+            columns:
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: order_status_pk
+                    nullable: false
+                    unique: true
+
+        - insert:
+            tableName: order_status
+            columns:
+              - column:
+                  name: name
+                  value: NEW
+        - insert:
+            tableName: order_status
+            columns:
+              - column:
+                  name: name
+                  value: COOKING
+        - insert:
+            tableName: order_status
+            columns:
+              - column:
+                  name: name
+                  value: PACKING
+        - insert:
+            tableName: order_status
+            columns:
+              - column:
+                  name: name
+                  value: IN_DELIVERY
+        - insert:
+            tableName: order_status
+            columns:
+              - column:
+                  name: name
+                  value: DONE
+
+        - addForeignKeyConstraint:
+            baseTableName: order
+            baseColumnNames: status
+            referencedTableName: order_status
+            referencedColumnNames: name
+            constraintName: order_fk4
