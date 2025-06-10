@@ -31,4 +31,13 @@ public class RestaurantCrudService {
     return restaurants;
   }
 
+  public List<Restaurant> getAllWithCouriersAndAddresses() {
+    var restaurants =  restaurantRepository.findAllWithAddressAndCouriers();
+    if (restaurants.isEmpty()) {
+      throw new BusinessLogicException("Нет ни одного ресторана в БД");
+    }
+
+    return restaurants;
+  }
+
 }

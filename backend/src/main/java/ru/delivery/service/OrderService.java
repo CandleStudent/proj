@@ -168,7 +168,7 @@ public class OrderService {
   @Transactional
   public List<WorkerActiveOrderDto> getActiveOrdersInRestaurant(String userEmail) {
     var admin = restaurantAdminCrudService.getByEmail(userEmail);
-    var activeOrders = orderCrudService.findByRestaurantAndStatusIn(admin.getRestaurant());
+    var activeOrders = orderCrudService.findByRestaurantAndStatusInActive(admin.getRestaurant());
 
     return orderMapper.ordersToWorkerActiveOrderDtos(activeOrders);
   }
@@ -176,7 +176,7 @@ public class OrderService {
   @Transactional
   public WorkerActiveOrderDto pushOrderStatusByAdmin(String userEmail, Long id) {
     var admin = restaurantAdminCrudService.getByEmail(userEmail);
-    var activeOrders = orderCrudService.findByRestaurantAndStatusIn(admin.getRestaurant());
+    var activeOrders = orderCrudService.findByRestaurantAndStatusInActive(admin.getRestaurant());
 
     var pushedOrder = activeOrders.stream()
         .filter(order -> order.getId().equals(id))
@@ -197,7 +197,7 @@ public class OrderService {
   @Transactional
   public void deleteOrderByAdmin(String userEmail, Long id) {
     var admin = restaurantAdminCrudService.getByEmail(userEmail);
-    var activeOrders = orderCrudService.findByRestaurantAndStatusIn(admin.getRestaurant());
+    var activeOrders = orderCrudService.findByRestaurantAndStatusInActive(admin.getRestaurant());
 
     var deletingOrder = activeOrders.stream()
         .filter(order -> order.getId().equals(id))
@@ -215,7 +215,7 @@ public class OrderService {
   public void updateOrderByAdmin(String userEmail, Long id,
       @Valid UpdatedOrderDto updatedOrderDto) {
     var admin = restaurantAdminCrudService.getByEmail(userEmail);
-    var activeOrders = orderCrudService.findByRestaurantAndStatusIn(admin.getRestaurant());
+    var activeOrders = orderCrudService.findByRestaurantAndStatusInActive(admin.getRestaurant());
 
     var updatingOrder = activeOrders.stream()
         .filter(order -> order.getId().equals(id))

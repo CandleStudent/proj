@@ -31,4 +31,11 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
               where r.id= :id""")
   Optional<Restaurant> findWithAddressAndCouriers(Long id);
 
+  @Query(
+      value = """
+              select r from Restaurant r
+              left join fetch r.address
+              left join fetch r.couriers""")
+  List<Restaurant> findAllWithAddressAndCouriers();
+
 }
