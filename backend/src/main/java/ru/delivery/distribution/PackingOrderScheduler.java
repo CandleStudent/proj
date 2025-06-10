@@ -12,8 +12,9 @@ public class PackingOrderScheduler {
 
   private final DispatcherService dispatcherService;
 
-//  @Scheduled(fixedRate = 5 * 60 * 1000)
-@Scheduled(fixedDelay = 1000 * 60, initialDelay = 1000 * 10)
+  @Scheduled(
+      initialDelayString = "${scheduler.assign-initial-delay-ms}",
+      fixedDelayString = "${scheduler.assign-delay-ms}")
   public void assignPackingOrdersToCouriers() {
     log.info("PackingOrderScheduler started");
     dispatcherService.assignOrdersToCouriers();

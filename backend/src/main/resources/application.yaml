@@ -28,3 +28,7 @@ spring:
       - classpath:application-secrets.yaml
       - classpath:application-integration.yaml
 
+scheduler:
+  assign-delay-ms: 600000
+  assign-initial-delay-ms: 10000
+  enabled: true
