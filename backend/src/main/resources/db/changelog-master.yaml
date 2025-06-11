@@ -58,4 +58,7 @@ databaseChangeLog:
       file: "changelogs/create_user_status_table.yaml"
   - include:
       relativeToChangeLogFile: true
+      file: "changelogs/add_tech_delivery_sequence_column_in_order.yaml"
+  - include:
+      relativeToChangeLogFile: true
       file: "changelogs/init_master_user.yaml" # for testing purposes master user inserted via liquibase

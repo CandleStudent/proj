@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_tech_delivery_sequence_column_in_order
+      author: CandleStudent
+      changes:
+        - addColumn:
+            tableName: order
+            columns:
+              - column:
+                  name: delivery_sequence
+                  type: int
+                  constraints:
+                    nullable: true
+        - sql:
+            sql: >
+              alter table "order"
+              add constraint order_delivery_sequence_c1
+              check (delivery_sequence >= 0)

@@ -83,6 +83,9 @@ public class Order {
   @Column(name = "cost", precision = 20, scale = 2)
   private BigDecimal cost;
 
+  @Column(name = "deliverySequence")
+  private Integer deliverySequence;
+
   @OneToMany(
       mappedBy = "order",
       cascade = CascadeType.ALL,
