@@ -9,5 +9,5 @@ import ru.delivery.entity.Courier;
 @Mapper(componentModel = ComponentModel.SPRING)
 public interface CourierMapper {
 
-  CourierInfoDto customerAndEmailToCurrentProfileDataDto(Courier courier);
+  CourierInfoDto courierToCourierInfoDto(Courier courier);
 }

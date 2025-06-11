@@ -10,6 +10,15 @@ const COURIER_ENDPOINT = '/api/courier'
 
 export default {
   components: {WorkerHeader, OrderDetails},
+  computed: {
+    sortedOrders() {
+      return [...this.orders].sort((a, b) => {
+        if (a.deliverySequence == null) return 1;
+        if (b.deliverySequence == null) return -1;
+        return a.deliverySequence - b.deliverySequence;
+      });
+    }
+  },
   data() {
     return {
       orders: [],
@@ -142,7 +151,7 @@ export default {
 
     <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 p-6">
       <div
-          v-for="order in orders"
+          v-for="order in sortedOrders"
           :key="order.id"
           class="bg-white p-4 rounded-lg shadow-md border text-sm space-y-2">
 
@@ -153,6 +162,7 @@ export default {
         <p><strong>Оплата:</strong> {{ order.paymentType }}</p>
         <p><strong>Email клиента:</strong> {{ order.clientEmail }}</p>
         <p><strong>Создан:</strong> {{ formatDateTime(order.orderCreatedAt) }}</p>
+        <p v-if="order.deliverySequence"><strong>Рекомендованный порядок доставки:</strong> {{ order.deliverySequence }}</p>
 
         <div class="flex justify-between mt-4">
           <button

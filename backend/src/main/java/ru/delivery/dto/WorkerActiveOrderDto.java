@@ -41,5 +41,6 @@ public class WorkerActiveOrderDto {
   private String courierPhone;
 
   private LocalDateTime orderCreatedAt;
+  private Integer deliverySequence;
 
 }

@@ -189,6 +189,7 @@ public class DispatcherService {
     log.info("Создаем назначения");
     for (int vehicleId = 0; vehicleId < numVehicles; vehicleId++) {
       long index = routing.start(vehicleId);
+      log.info("Route for courier " + vehicleId + ":");
       List<Order> ordersForCourier = new ArrayList<>();
       while (!routing.isEnd(index)) {
         int nodeIndex = manager.indexToNode(index);
@@ -198,15 +199,16 @@ public class DispatcherService {
         }
         index = solution.value(routing.nextVar(index));
       }
-
+      int delivery_sequence = 1;
       if (!ordersForCourier.isEmpty()) {
         var courier = freeCouriers.get(vehicleId);
         // Здесь назначаем заказам курьера, например, меняем поле courier и статус заказа
-        ordersForCourier.forEach(order -> {
+        for (var order : ordersForCourier) {
           order.setCourier(courier);
           order.setStatus(OrderStatus.IN_DELIVERY);
+          order.setDeliverySequence(delivery_sequence++);
           orderCrudService.saveOrUpdate(order);
-        });
+        }
         courier.setStatus(CourierStatus.IN_DELIVERY);
         courierCrudService.saveOrUpdate(courier);
         log.info("Назначено курьеру {} заказов: {}", courier.getId(), ordersForCourier.size());

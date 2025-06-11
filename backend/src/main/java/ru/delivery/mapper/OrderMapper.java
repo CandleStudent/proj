@@ -27,6 +27,7 @@ public interface OrderMapper {
   @Mapping(source = "courier.name", target = "courierName")
   @Mapping(source = "courier.phone", target = "courierPhone")
   @Mapping(source = "rowInsertTime", target = "orderCreatedAt")
+  @Mapping(source = "deliverySequence", target = "deliverySequence")
   WorkerActiveOrderDto orderToWorkerActiveOrderDto(Order order);
 
   List<WorkerActiveOrderDto> ordersToWorkerActiveOrderDtos(List<Order> orders);

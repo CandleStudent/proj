@@ -27,6 +27,6 @@ public class CourierService {
   @Transactional(readOnly = true)
   public CourierInfoDto getCourierInfo(String userEmail) {
     var courier = courierCrudService.getByEmail(userEmail);
-    return courierMapper.customerAndEmailToCurrentProfileDataDto(courier);
+    return courierMapper.courierToCourierInfoDto(courier);
   }
 }
