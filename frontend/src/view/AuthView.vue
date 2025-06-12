@@ -18,6 +18,6 @@ import { ref } from 'vue'
 import LoginForm from '../components/auth/LoginForm.vue'
 import RegisterForm from '../components/auth/RegisterForm.vue'
 
-const isRegistering = ref(true)
+const isRegistering = ref(false)
 const toggleMode = () => (isRegistering.value = !isRegistering.value)
 </script>
