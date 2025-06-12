@@ -17,7 +17,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import wrappingApi from '@/axios.js'
 import FormFields from './FormFields.vue'
 
 const props = defineProps({ onToggle: Function })
@@ -47,7 +47,7 @@ const handleLogin = async () => {
   }
 
   try {
-    const { data } = await axios.post('http://localhost:8080/api/auth/login', {
+    const { data } = await wrappingApi.post('/auth/login', {
       email: email.value,
       password: password.value
     })

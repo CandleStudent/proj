@@ -1,11 +1,10 @@
 <script>
-import axios from 'axios'
+import wrappingApi from '@/axios.js'
 import OrderDetails from '@/components/profile/OrderDetails.vue'
 import WorkerHeader from "@/components/WorkerHeader.vue";
 import {formatDateTime} from "../utils/utils.js";
 
-const API_HOST = 'http://localhost:8080'
-const ORDERS_ENDPOINT = '/api/admin/order'
+const ORDERS_ENDPOINT = '/admin/order'
 
 export default {
   components: {WorkerHeader, OrderDetails },
@@ -21,10 +20,7 @@ export default {
     formatDateTime,
     async fetchOrders() {
       try {
-        const token = localStorage.getItem('jwt_token')
-        const res = await axios.get(`${API_HOST}${ORDERS_ENDPOINT}/active`, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
+        const res = await wrappingApi.get(`${ORDERS_ENDPOINT}/active`)
         this.organizeOrders(res.data)
       } catch (e) {
       }
@@ -49,10 +45,7 @@ export default {
     },
     async nextStatus(order) {
       try {
-        const token = localStorage.getItem('jwt_token')
-        await axios.put(`${API_HOST}${ORDERS_ENDPOINT}/push/${order.id}`, {}, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
+        await wrappingApi.put(`${ORDERS_ENDPOINT}/push/${order.id}`)
 
         await this.fetchOrders()
       } catch (e) {
@@ -125,8 +118,8 @@ export default {
     <OrderDetails
         v-if="showDetails"
         :order="selectedOrder"
-        cancel-endpoint-prefix="/api/admin/order/cancel"
-        update-endpoint-prefix="/api/admin/order/update"
+        cancel-endpoint-prefix="/admin/order/cancel"
+        update-endpoint-prefix="/admin/order/update"
         :is-admin-mode="true"
         @close="handleCloseDetails"
         @updated="handleUpdate"

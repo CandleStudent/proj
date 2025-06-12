@@ -1,10 +1,10 @@
 <script>
 import CartList from '../cart/CartList.vue'
 import {menuItems} from '@/data/menu_items.js'
-import axios from "axios";
 import AddDishes from "@/components/profile/AddDishes.vue";
+import wrappingApi from '@/axios.js'
 
-const host = 'http://localhost:8080';
+
 
 export default {
   components: {
@@ -26,11 +26,11 @@ export default {
     },
     cancelEndpointPrefix: {
       type: String,
-      default: '/api/order/cancel'
+      default: '/order/cancel'
     },
     updateEndpointPrefix: {
       type: String,
-      default: '/api/order/update'
+      default: '/order/update'
     },
     isAdminMode: {
       type: Boolean,
@@ -73,10 +73,7 @@ export default {
   methods: {
     async cancelOrder() {
       try {
-        const token = localStorage.getItem('jwt_token')
-        await axios.delete(`${host}${this.cancelEndpointPrefix}/${this.order.id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
+        await wrappingApi.delete(`${this.cancelEndpointPrefix}/${this.order.id}`)
         alert('Заказ отменён')
         this.$emit('cancelled')
         this.$emit('close')
@@ -96,7 +93,6 @@ export default {
     },
     async saveChanges() {
       try {
-        const token = localStorage.getItem('jwt_token')
         const payload = {
           menuItems: this.editedItems.map(item => ({
             id: item.id,
@@ -104,9 +100,7 @@ export default {
           }))
         }
 
-        await axios.put(`${host}${this.updateEndpointPrefix}/${this.order.id}`, payload, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
+        await wrappingApi.put(`${this.updateEndpointPrefix}/${this.order.id}`, payload)
 
         alert('Заказ обновлён')
         this.$emit('updated')

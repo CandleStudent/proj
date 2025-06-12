@@ -1,12 +1,11 @@
 <script>
-import axios from 'axios'
+import wrappingApi from '@/axios.js'
 import OrderDetails from '@/components/profile/OrderDetails.vue'
 import WorkerHeader from "@/components/WorkerHeader.vue";
 import {formatDateTime} from "../utils/utils.js";
 
-const API_HOST = 'http://localhost:8080'
-const ORDERS_ENDPOINT = '/api/courier/order'
-const COURIER_ENDPOINT = '/api/courier'
+const ORDERS_ENDPOINT = '/courier/order'
+const COURIER_ENDPOINT = '/courier'
 
 export default {
   components: {WorkerHeader, OrderDetails},
@@ -32,12 +31,9 @@ export default {
     formatDateTime,
     async setCourierStatus(status) {
       try {
-        const token = localStorage.getItem('jwt_token')
-        await axios.put(
-            `${API_HOST}${COURIER_ENDPOINT}/status/${status}`,
-            {},
-            { headers: { Authorization: `Bearer ${token}` } }
-        )
+        await wrappingApi.put(
+            `${COURIER_ENDPOINT}/status/${status}`,
+            {})
         await this.getCourierInfo()
       } catch (e) {
         alert('Ошибка при обновлении статуса курьера')
@@ -45,10 +41,7 @@ export default {
     },
     async getCourierInfo() {
       try {
-        const token = localStorage.getItem('jwt_token')
-        const res = await axios.get(`${API_HOST}${COURIER_ENDPOINT}/info`, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
+        const res = await wrappingApi.get(`${COURIER_ENDPOINT}/info`)
         this.courierInfo = res.data
       } catch (e) {
         alert('Ошибка при загрузке информации о курьере')
@@ -56,10 +49,7 @@ export default {
     },
     async fetchOrders() {
       try {
-        const token = localStorage.getItem('jwt_token')
-        const res = await axios.get(`${API_HOST}${ORDERS_ENDPOINT}/active`, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
+        const res = await wrappingApi.get(`}${ORDERS_ENDPOINT}/active`)
         this.orders = res.data
       } catch (e) {
       }
@@ -77,10 +67,7 @@ export default {
     },
     async nextStatus(order) {
       try {
-        const token = localStorage.getItem('jwt_token')
-        await axios.put(`${API_HOST}${ORDERS_ENDPOINT}/push/${order.id}`, {}, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
+        await wrappingApi.put(`${ORDERS_ENDPOINT}/push/${order.id}`)
         await this.fetchOrders()
       } catch (e) {
         alert('Ошибка при изменении статуса заказа')
@@ -183,8 +170,8 @@ export default {
     <OrderDetails
         v-if="showDetails"
         :order="selectedOrder"
-        cancel-endpoint-prefix="/api/courier/order/cancel"
-        update-endpoint-prefix="/api/courier/order/update"
+        cancel-endpoint-prefix="/courier/order/cancel"
+        update-endpoint-prefix="/courier/order/update"
         :is-admin-mode="false"
         @close="handleCloseDetails"
         @updated="handleUpdate"

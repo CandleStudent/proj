@@ -1,9 +1,8 @@
 <script>
-  import axios from 'axios'
+  import wrappingApi from '@/axios.js'
   import Header from "@/components/Header.vue";
-  // Вынесенные переменные
-  const API_HOST = 'http://localhost:8080'
-  const PROFILE_ENDPOINT = '/api/profile'
+
+  const PROFILE_ENDPOINT = '/profile'
 
   const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
@@ -28,10 +27,7 @@
     },
     methods: {
       async fetchProfile() {
-        const token = localStorage.getItem('jwt_token')
-        const res = await axios.get(`${API_HOST}${PROFILE_ENDPOINT}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
+        const res = await wrappingApi.get(`${PROFILE_ENDPOINT}`)
         this.form = res.data
       },
       async updateProfile() {
@@ -43,19 +39,13 @@
           return
         }
 
-        const token = localStorage.getItem('jwt_token')
-        const newJwtRes = await axios.put(`${API_HOST}${PROFILE_ENDPOINT}`, this.form, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
+        const newJwtRes = await wrappingApi.put(`${PROFILE_ENDPOINT}`, this.form)
         localStorage.setItem('jwt_token', newJwtRes.data)
         alert('Данные профиля обновлены')
       },
       async updatePassword() {
-        const token = localStorage.getItem('jwt_token')
         try {
-          await axios.put(`${API_HOST}${PROFILE_ENDPOINT}/password`, this.passwordData, {
-            headers: {Authorization: `Bearer ${token}`}
-          })
+          await wrappingApi.put(`${PROFILE_ENDPOINT}/password`, this.passwordData)
           alert('Пароль обновлен')
         } catch (err) {
           alert(err.response.data ? err.response.data : err)

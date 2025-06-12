@@ -77,6 +77,7 @@
 import Header from "@/components/Header.vue";
 import CartList from "@/components/cart/CartList.vue";
 import AddressList from "@/components/addresses/AddressList.vue";
+import wrappingApi from '@/axios.js'
 
 export default {
   components: {
@@ -111,19 +112,7 @@ export default {
     },
     async fetchAddresses() {
       try {
-        const token = localStorage.getItem('jwt_token');
-        if (!token) {
-          throw new Error('Неавторизован');
-        }
-
-        const response = await fetch(`http://localhost:8080/api/address`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (!response.ok) {
-          throw new Error('Ошибка при загрузке адресов');
-        }
+        const response = await wrappingApi.get(`/address`);
 
         this.addresses = await response.json();
 
@@ -144,10 +133,6 @@ export default {
           alert('Выберите адрес доставки');
           return;
         }
-        const token = localStorage.getItem('jwt_token');
-        if (!token) {
-          throw new Error('Неавторизован');
-        }
 
         const orderPayload = {
           customerAddressId: this.selectedAddressId,
@@ -158,17 +143,7 @@ export default {
           })),
         };
 
-        const response = await fetch('http://localhost:8080/api/order/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(orderPayload),
-        });
-        if (!response.ok) {
-          throw new Error('Ошибка оформления заказа');
-        }
+        const response = await wrappingApi.post('/order/create', orderPayload);
 
         alert('Заказ успешно оформлен!');
         this.cart = [];

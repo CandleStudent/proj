@@ -58,6 +58,8 @@
 
 <script>
 import AddAddressModal from "@/components/addresses/AddAddressModal.vue";
+import wrappingApi from '@/axios.js'
+
 
 export default {
   name: 'AddressList',
@@ -92,13 +94,7 @@ export default {
     async deleteAddress(id) {
       if (!confirm('Удалить адрес?')) return;
       try {
-        const token = localStorage.getItem('jwt_token');
-        const response = await fetch(`http://localhost:8080/api/address/detach/${id}`, {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await wrappingApi.put(`/address/detach/${id}`);
         if (!response.ok) throw new Error('Ошибка удаления');
         this.$emit('address-deleted');
       } catch (e) {

@@ -73,6 +73,8 @@
 </template>
 
 <script>
+import wrappingApi from '@/axios.js'
+
 let debounceTimer = null;
 
 export default {
@@ -140,8 +142,6 @@ export default {
     },
     async submitAddress() {
       try {
-        const token = localStorage.getItem('jwt_token');
-        if (!token) throw new Error('Неавторизован');
 
         const payload = {
           city: this.address.city.trim(),
@@ -153,14 +153,7 @@ export default {
           comment: this.address.comment?.trim() || null,
         };
 
-        const response = await fetch('http://localhost:8080/api/address', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        });
+        const response = await wrappingApi.post('/address', payload);
 
         if (!response.ok) throw new Error('Ошибка добавления адреса');
 

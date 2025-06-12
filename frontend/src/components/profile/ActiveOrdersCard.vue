@@ -1,11 +1,9 @@
 <script>
-import axios from 'axios'
+import wrappingApi from '@/axios.js'
 import OrderDetails from "@/components/profile/OrderDetails.vue";
 import { formatDateTime } from '@/utils/utils.js'
 
-
-const API_HOST = 'http://localhost:8080'
-const ORDERS_ENDPOINT = '/api/order/active'
+const ORDERS_ENDPOINT = '/order/active'
 
 export default {
   components: {OrderDetails},
@@ -34,10 +32,7 @@ export default {
       this.orderIndex = 0
     },
     async fetchOrders() {
-      const token = localStorage.getItem('jwt_token')
-      const res = await axios.get(`${API_HOST}${ORDERS_ENDPOINT}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      const res = await wrappingApi.get(`${ORDERS_ENDPOINT}`)
       this.orders = res.data
     },
     prevOrder() {
@@ -48,10 +43,7 @@ export default {
     },
     async cancelOrder() {
       try {
-        const token = localStorage.getItem('jwt_token')
-        const res = await axios.delete(`http://localhost:8080/api/order/cancel/${this.orders[this.orderIndex].id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
+        const res = await wrappingApi.delete(`/order/cancel/${this.orders[this.orderIndex].id}`)
 
         alert('Заказ отменён')
       } catch (e) {
