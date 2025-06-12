@@ -95,7 +95,6 @@ export default {
       if (!confirm('Удалить адрес?')) return;
       try {
         const response = await wrappingApi.put(`/address/detach/${id}`);
-        if (!response.ok) throw new Error('Ошибка удаления');
         this.$emit('address-deleted');
       } catch (e) {
         alert(e.message || 'Ошибка при удалении');

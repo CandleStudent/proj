@@ -155,8 +155,6 @@ export default {
 
         const response = await wrappingApi.post('/address', payload);
 
-        if (!response.ok) throw new Error('Ошибка добавления адреса');
-
         this.$emit('address-added');
         this.close();
         this.resetForm();

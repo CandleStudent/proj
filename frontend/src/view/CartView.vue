@@ -19,7 +19,6 @@
             :addresses="addresses"
             v-model="selectedAddressId"
             @add-address="handleAddressAdded"
-            @edit-address="editAddress"
             @address-deleted="fetchAddresses"/>
 
         <!-- Нижняя панель с оплатой и итогом -->
@@ -114,7 +113,7 @@ export default {
       try {
         const response = await wrappingApi.get(`/address`);
 
-        this.addresses = await response.json();
+        this.addresses = response.data;
 
         if (!this.addresses.find(addr => addr.id === this.selectedAddressId)) {
           this.selectedAddressId = null;

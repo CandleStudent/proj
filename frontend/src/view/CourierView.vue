@@ -49,7 +49,7 @@ export default {
     },
     async fetchOrders() {
       try {
-        const res = await wrappingApi.get(`}${ORDERS_ENDPOINT}/active`)
+        const res = await wrappingApi.get(`${ORDERS_ENDPOINT}/active`)
         this.orders = res.data
       } catch (e) {
       }
