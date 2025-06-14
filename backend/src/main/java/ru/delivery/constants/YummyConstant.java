@@ -1,10 +1,13 @@
 package ru.delivery.constants;
 
 import java.util.Set;
+import lombok.experimental.UtilityClass;
 import ru.delivery.dictionary.OrderStatus;
 
+@UtilityClass
 public class YummyConstant {
 
+  @UtilityClass
   public static class OrderConstant {
 
     public final static Set<OrderStatus> ACTIVE_STATUSES =
