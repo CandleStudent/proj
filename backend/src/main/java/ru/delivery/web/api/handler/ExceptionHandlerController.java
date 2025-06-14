@@ -7,9 +7,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.delivery.exception.BusinessLogicException;
 import ru.delivery.web.api.controller.AddressController;
+import ru.delivery.web.api.controller.AdminOrderController;
 import ru.delivery.web.api.controller.AuthController;
+import ru.delivery.web.api.controller.CourierController;
 import ru.delivery.web.api.controller.OrderController;
 import ru.delivery.web.api.controller.ProfileController;
+import ru.delivery.web.api.controller.RestaurantController;
 
 @Slf4j
 @RestControllerAdvice(
@@ -17,7 +20,10 @@ import ru.delivery.web.api.controller.ProfileController;
         AddressController.class,
         AuthController.class,
         OrderController.class,
-        ProfileController.class
+        ProfileController.class,
+        AdminOrderController.class,
+        CourierController.class,
+        RestaurantController.class
     }
 )
 public class ExceptionHandlerController {
